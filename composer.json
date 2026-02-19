@@ -1,43 +1,44 @@
 {
-  "name": "coco/source-watcher",
-  "description": "Project which allows to watch different sources of data",
-  "type": "project",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Jean Paul Ruiz",
-      "email": "jpruiz114@gmail.com"
+    "name": "coco/source-watcher",
+    "description": "Project which allows to watch different sources of data",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jean Paul Ruiz",
+            "email": "jpruiz114@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "doctrine/dbal": "^3.0 || ^4.0",
+        "ext-curl": "*",
+        "ext-dom": "*",
+        "ext-json": "*",
+        "ext-pgsql": "*",
+        "guzzlehttp/guzzle": "^7.0",
+        "malios/php-to-ascii-table": "^3.0",
+        "monolog/monolog": "^2.0 || ^3.0",
+        "php-snippets/circular-array": "^1.0",
+        "ramsey/uuid": "^4.0 || ^5.0",
+        "softcreatr/jsonpath": "^0.6.0",
+        "symfony/yaml": "^5.0 || ^6.0",
+        "tuqqu/gender-detector": "^0.3.0",
+        "vlucas/phpdotenv": "^5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Coco\\SourceWatcher\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Coco\\SourceWatcher\\": "src/",
+            "Coco\\SourceWatcher\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpspec/prophecy": "^1.16",
+        "phpunit/phpunit": "^9.5"
     }
-  ],
-  "require": {
-    "doctrine/dbal": "*",
-    "ext-curl": "*",
-    "ext-dom": "*",
-    "ext-json": "*",
-    "ext-pgsql": "*",
-    "guzzlehttp/guzzle": "*",
-    "malios/php-to-ascii-table": "*",
-    "monolog/monolog": "*",
-    "php": "*",
-    "php-snippets/circular-array": "*",
-    "ramsey/uuid": "*",
-    "softcreatr/jsonpath": "*",
-    "symfony/yaml": "*",
-    "tuqqu/gender-detector": "^0.3.0",
-    "vlucas/phpdotenv": "*"
-  },
-  "autoload": {
-    "psr-4": {
-      "Coco\\SourceWatcher\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Coco\\SourceWatcher\\": "src/",
-      "Coco\\SourceWatcher\\Tests\\": "tests/"
-    }
-  },
-  "require-dev": {
-    "phpunit/phpunit": "^9"
-  }
 }
