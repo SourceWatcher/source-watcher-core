@@ -1,4 +1,8 @@
 build:
+    environment:
+        # Pin to 7.4 so Scrutinizer uses a pre-installed image instead of building
+        # PHP 8.x from source (which fails on their image: OpenSSL 1.0.1f < 1.0.2).
+        php: 7.4.33
     nodes:
         analysis:
             tests:
