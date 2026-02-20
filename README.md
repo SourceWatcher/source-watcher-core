@@ -21,8 +21,9 @@ This is a PHP project that allows extracting, transforming, and loading data fro
 composer install
 ```
 
-If you see Scrutinizer or CI errors about the lock file not being installable on PHP 8.2 (e.g. `malios/php-to-ascii-table`, `phpspec/prophecy`, `php-ds/php-ds`), run **`composer update`** once to refresh the lock file. Without local PHP, use Docker from the repo root:  
-`docker compose -f docker-compose.dev.yml run --rm php sh -c "cd source-watcher-core && composer update"`.
+If you see Scrutinizer or CI errors about the lock file not being installable on PHP 8.2, run **`composer update`** once to refresh the lock file. Without local PHP, from the repo root run:  
+`docker run --rm -v "$(pwd)":/app -w /app/source-watcher-core composer:2 composer update --no-interaction --ignore-platform-reqs`  
+or use **`./source-watcher-core/update-deps.sh`**.
 
 ## Running tests
 
