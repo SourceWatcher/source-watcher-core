@@ -197,6 +197,7 @@ class SourceWatcherTest extends ParentTest
     /**
      * Acting as an integration test to verify how two extractors work together.
      *
+     * @group integration
      * @throws SourceWatcherException
      */
     public function testMultipleExtractors () : void

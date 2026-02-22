@@ -3,8 +3,10 @@
 namespace Coco\SourceWatcher\Tests\Core\Extractors;
 
 use Coco\SourceWatcher\Core\Database\Connections\MySqlConnector;
+use Coco\SourceWatcher\Core\Database\Connections\SqliteConnector;
 use Coco\SourceWatcher\Core\Extractors\DatabaseExtractor;
 use Coco\SourceWatcher\Core\IO\Inputs\DatabaseInput;
+use Coco\SourceWatcher\Core\IO\Inputs\FileInput;
 use Coco\SourceWatcher\Core\SourceWatcherException;
 use Coco\SourceWatcher\Tests\Common\ParentTest;
 
@@ -32,7 +34,106 @@ class DatabaseExtractorTest extends ParentTest
         $this->mysqlConnector->setTableName( $this->tableName );
     }
 
+    public function testSetGetQuery () : void
+    {
+        $extractor = new DatabaseExtractor();
+        $this->assertSame( "", $extractor->getQuery() );
+        $extractor->setQuery( "SELECT * FROM t" );
+        $this->assertSame( "SELECT * FROM t", $extractor->getQuery() );
+    }
+
+    public function testExtractThrowsWhenNoInput () : void
+    {
+        $this->expectException( SourceWatcherException::class );
+        $this->expectExceptionMessage( "An input must be provided" );
+
+        $extractor = new DatabaseExtractor();
+        $extractor->setQuery( "SELECT 1" );
+        $extractor->extract();
+    }
+
+    public function testExtractThrowsWhenNotDatabaseInput () : void
+    {
+        $this->expectException( SourceWatcherException::class );
+        $this->expectExceptionMessage( DatabaseInput::class );
+
+        $extractor = new DatabaseExtractor();
+        $extractor->setInput( new FileInput( "/tmp/any" ) );
+        $extractor->setQuery( "SELECT 1" );
+        $extractor->extract();
+    }
+
+    public function testExtractThrowsWhenNoConnector () : void
+    {
+        $this->expectException( SourceWatcherException::class );
+        $this->expectExceptionMessage( "No database connector found" );
+
+        $extractor = new DatabaseExtractor();
+        $input = new DatabaseInput();
+        $extractor->setInput( $input );
+        $extractor->setQuery( "SELECT 1" );
+        $extractor->extract();
+    }
+
+    public function testExtractThrowsWhenQueryMissing () : void
+    {
+        $this->expectException( SourceWatcherException::class );
+        $this->expectExceptionMessage( "Query missing" );
+
+        $connector = new SqliteConnector();
+        $connector->setPath( ":memory:" );
+        $connector->setMemory( true );
+        $extractor = new DatabaseExtractor();
+        $extractor->setInput( new DatabaseInput( $connector ) );
+        $extractor->setQuery( "" );
+        $extractor->extract();
+    }
+
     /**
+     * extract() success path with in-memory SQLite (covers executePlainQuery and foreach)
+     *
+     * @throws SourceWatcherException
+     */
+    public function testExtractWithSqlite () : void
+    {
+        $connector = new SqliteConnector();
+        $connector->setPath( ":memory:" );
+        $connector->setMemory( true );
+
+        $extractor = new DatabaseExtractor();
+        $extractor->setInput( new DatabaseInput( $connector ) );
+        $extractor->setQuery( "SELECT 1 AS num, 'hello' AS msg" );
+
+        $result = $extractor->extract();
+
+        $this->assertCount( 1, $result );
+        $this->assertEquals( 1, $result[0]["num"] );
+        $this->assertSame( "hello", $result[0]["msg"] );
+    }
+
+    /**
+     * getArrayRepresentation includes connector class and connection parameters
+     *
+     * @throws SourceWatcherException
+     */
+    public function testGetArrayRepresentation () : void
+    {
+        $connector = new SqliteConnector();
+        $connector->setPath( ":memory:" );
+        $connector->setMemory( true );
+        $extractor = new DatabaseExtractor();
+        $extractor->setInput( new DatabaseInput( $connector ) );
+        $extractor->setQuery( "SELECT 1" );
+
+        $arr = $extractor->getArrayRepresentation();
+
+        $this->assertArrayHasKey( "input", $arr );
+        $this->assertSame( SqliteConnector::class, $arr["input"]["class"] );
+        $this->assertArrayHasKey( "parameters", $arr["input"] );
+    }
+
+    /**
+     * @group integration
      * @throws SourceWatcherException
      */
     public function testExtractFromMySqlTable () : void

@@ -10,7 +10,7 @@ class FileInput extends Input
 {
     private ?string $fileLocation;
 
-    public function __construct ( string $fileLocation = null )
+    public function __construct ( ?string $fileLocation = null )
     {
         $this->fileLocation = $fileLocation;
     }

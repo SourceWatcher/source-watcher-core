@@ -24,6 +24,8 @@ composer install
 If you see Scrutinizer or CI errors about the lock file not being installable on PHP 8.2, run **`composer update`** once to refresh the lock file. Without local PHP, from the repo root run:  
 `docker run --rm -v "$(pwd)":/app -w /app/source-watcher-core composer:2 composer update --no-interaction --ignore-platform-reqs`.
 
+To get a list of Scrutinizer issues without screenshots (API or local PHPStan/Psalm), see [docs/scrutinizer-issues.md](docs/scrutinizer-issues.md).
+
 ## Running tests
 
 ```bash

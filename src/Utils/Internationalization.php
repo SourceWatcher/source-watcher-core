@@ -46,7 +46,7 @@ class Internationalization
         return $language;
     }
 
-    public function getText ( string $className, string $entry, string $language = null ) : string
+    public function getText ( string $className, string $entry, ?string $language = null ) : string
     {
         if ( empty( $language ) ) {
             $language = $this->getLanguageFromEnvFile();

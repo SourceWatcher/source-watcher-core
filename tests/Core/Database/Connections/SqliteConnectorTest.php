@@ -135,4 +135,25 @@ class SqliteConnectorTest extends TestCase
 
         $this->assertEquals( 1, $connector->insert( $row ) );
     }
+
+    /**
+     * getConnection() returns the connection after a successful insert
+     *
+     * @throws SourceWatcherException
+     */
+    public function testGetConnectionAfterInsert () : void
+    {
+        $connector = new SqliteConnector();
+        $connector->setPath( $this->sqliteDbLocation );
+        $connector->setMemory( false );
+        $connector->setTableName( "people" );
+
+        $row = new Row( [
+            $this->nameIndex => $this->johnDoeName,
+            $this->emailAddressIndex => $this->johnDoeEmailAddress
+        ] );
+
+        $connector->insert( $row );
+        $this->assertNotNull( $connector->getConnection() );
+    }
 }

@@ -53,8 +53,6 @@ class WebPageHandler implements Handler
 
         $this->html = curl_exec( $ch );
 
-        curl_close( $ch );
-
         # Create a DOM parser object
         $this->dom = new DOMDocument();
 

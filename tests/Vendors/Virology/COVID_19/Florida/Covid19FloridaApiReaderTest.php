@@ -92,6 +92,21 @@ class Covid19FloridaApiReaderTest extends TestCase
     }
 
     /**
+     * getResultFromURL returns "0" when API response decodes to null (covers null branch)
+     */
+    public function testGetResultFromURLReturnsZeroWhenJsonNull () : void
+    {
+        $reader = new class extends Covid19FloridaApiReader {
+            public function read () : string
+            {
+                return "null";
+            }
+        };
+        $result = $reader->getResultFromURL( "https://example.com/any" );
+        $this->assertSame( "0", $result );
+    }
+
+    /**
      * @throws SourceWatcherException
      */
     public function testGetExceptionFromIncorrectURL () : void

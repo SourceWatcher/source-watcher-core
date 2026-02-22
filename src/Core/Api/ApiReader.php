@@ -90,8 +90,6 @@ class ApiReader implements Reader
 
         $response = curl_exec( $curl );
 
-        curl_close( $curl );
-
         if ( !$response && $this->currentAttempt < $this->attempts ) {
             $this->currentAttempt++;
 

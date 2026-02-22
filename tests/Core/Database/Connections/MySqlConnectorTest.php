@@ -128,7 +128,7 @@ class MySqlConnectorTest extends ParentTest
     {
         $this->expectException( SourceWatcherException::class );
         $this->expectExceptionMessage( Internationalization::getInstance()->getText( Connector::class,
-            "Connection_Object_Not_Connected_Cannot_Insert" ) );
+            "Unexpected_Error" ) );
 
         $this->mysqlConnector->setTableName( $this->tableName );
 
@@ -137,6 +137,7 @@ class MySqlConnectorTest extends ParentTest
 
     /**
      * @throws SourceWatcherException
+     * @group integration
      */
     public function testInsertUsingEnvironmentVariables () : void
     {

@@ -4,9 +4,4 @@ phpunit-report
 vendor
 .env
 .phpunit.result.cache
-
-workspace/.gitignore
-workspace/readme.md
-workspace/*.env
-workspace/*.php
-workspace/*/
+logs/

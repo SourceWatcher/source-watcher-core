@@ -54,9 +54,9 @@ class PostgreSqlConnector extends ClientServerDatabaseConnector
         return $this->defaultDatabaseName;
     }
 
-    public function setDefaultDatabaseName ( string $defaultDatabaseName ) : void
+    public function setDefaultDatabaseName ( ?string $defaultDatabaseName ) : void
     {
-        $this->defaultDatabaseName = $defaultDatabaseName;
+        $this->defaultDatabaseName = $defaultDatabaseName ?? "";
     }
 
     public function getSslMode () : string

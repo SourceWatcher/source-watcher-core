@@ -54,19 +54,19 @@ class Pipeline implements Iterator
 
     public function execute () : void
     {
-        foreach ( $this->steps as $index => $currentStep ) {
+        foreach ( $this->steps as $currentStep ) {
             if ( $currentStep instanceof Extractor ) {
                 $this->results = $currentStep->extract();
             }
 
             if ( $currentStep instanceof Transformer ) {
-                foreach ( $this->results as $currentIndex => $currentItem ) {
-                    $currentStep->transform( $this->results[$currentIndex] );
+                foreach ( $this->results as $currentItem ) {
+                    $currentStep->transform( $currentItem );
                 }
             }
 
             if ( $currentStep instanceof Loader ) {
-                foreach ( $this->results as $currentIndex => $currentItem ) {
+                foreach ( $this->results as $currentItem ) {
                     try {
                         $currentStep->load( $currentItem );
                     } catch ( Exception $exception ) {
@@ -84,27 +84,27 @@ class Pipeline implements Iterator
 
     private int $index = 0;
 
-    public function current ()
+    public function current () : mixed
     {
         return $this->results[$this->index];
     }
 
-    public function next ()
+    public function next () : void
     {
         $this->index++;
     }
 
-    public function key ()
+    public function key () : int
     {
         return $this->index;
     }
 
-    public function valid ()
+    public function valid () : bool
     {
-        return isset( $this->results[$this->key()] );
+        return isset( $this->results[$this->index] );
     }
 
-    public function rewind ()
+    public function rewind () : void
     {
         $this->index = 0;
     }

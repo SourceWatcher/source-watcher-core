@@ -127,7 +127,7 @@ class SourceWatcher
         $this->pipeline = new Pipeline();
     }
 
-    public function save ( string $name = null ) : string
+    public function save ( ?string $name = null ) : string
     {
         $arrayRepresentation = [];
 
