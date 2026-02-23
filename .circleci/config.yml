@@ -14,19 +14,7 @@ jobs:
       - run:
           name: run tests
           command: ./vendor/bin/phpunit
-  deploy:
-    # This is an example deploy job, not actually used by the workflow
-    docker:
-      - image: cimg/base:stable
-    steps:
-      # Replace this with steps to deploy to users
-      - run:
-          name: deploy
-          command: '#e.g. ./deploy.sh'
 workflows:
   build-and-test:
     jobs:
       - test-php
-    # - deploy:
-    #     requires:
-    #       - test-php
