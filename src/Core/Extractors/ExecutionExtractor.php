@@ -2,9 +2,9 @@
 
 namespace Coco\SourceWatcher\Core\Extractors;
 
-use Coco\SourceWatcher\Core\Extractor;
+use Coco\SourceWatcher\Core\Step\Extractor;
 use Coco\SourceWatcher\Core\IO\Inputs\ExtractorResultInput;
-use Coco\SourceWatcher\Core\SourceWatcherException;
+use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
 
 /**
  * Class ExecutionExtractor

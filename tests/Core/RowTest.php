@@ -2,7 +2,7 @@
 
 namespace Coco\SourceWatcher\Tests\Core;
 
-use Coco\SourceWatcher\Core\Row;
+use Coco\SourceWatcher\Core\Data\Row;
 use PHPUnit\Framework\TestCase;
 
 /**

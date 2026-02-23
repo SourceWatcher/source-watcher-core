@@ -2,10 +2,10 @@
 
 namespace Coco\SourceWatcher\Core\Extractors;
 
-use Coco\SourceWatcher\Core\Extractor;
+use Coco\SourceWatcher\Core\Data\Row;
+use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
 use Coco\SourceWatcher\Core\IO\Inputs\FileInput;
-use Coco\SourceWatcher\Core\Row;
-use Coco\SourceWatcher\Core\SourceWatcherException;
+use Coco\SourceWatcher\Core\Step\Extractor;
 
 class TxtExtractor extends Extractor
 {

@@ -2,11 +2,11 @@
 
 namespace Coco\SourceWatcher\Tests\Core\Extractors;
 
-use Coco\SourceWatcher\Core\Extractor;
+use Coco\SourceWatcher\Core\Data\Row;
+use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
 use Coco\SourceWatcher\Core\Extractors\ExecutionExtractor;
 use Coco\SourceWatcher\Core\IO\Inputs\ExtractorResultInput;
-use Coco\SourceWatcher\Core\Row;
-use Coco\SourceWatcher\Core\SourceWatcherException;
+use Coco\SourceWatcher\Core\Step\Extractor;
 use PHPUnit\Framework\TestCase;
 
 /**

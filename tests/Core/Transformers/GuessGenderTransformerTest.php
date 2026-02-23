@@ -2,7 +2,7 @@
 
 namespace Coco\SourceWatcher\Tests\Core\Transformers;
 
-use Coco\SourceWatcher\Core\Row;
+use Coco\SourceWatcher\Core\Data\Row;
 use Coco\SourceWatcher\Core\Transformers\GuessGenderTransformer;
 use GenderDetector\Country;
 use GenderDetector\Gender;

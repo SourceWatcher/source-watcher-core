@@ -2,7 +2,7 @@
 
 namespace Coco\SourceWatcher\Core\IO\Inputs;
 
-use Coco\SourceWatcher\Core\Extractor;
+use Coco\SourceWatcher\Core\Step\Extractor;
 
 /**
  * Class ExtractorResultInput

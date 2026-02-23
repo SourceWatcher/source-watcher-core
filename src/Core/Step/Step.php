@@ -1,13 +1,11 @@
 <?php
 
-namespace Coco\SourceWatcher\Core;
+namespace Coco\SourceWatcher\Core\Step;
 
 use Coco\SourceWatcher\Utils\TextUtils;
 
 /**
- * Class Step
- *
- * @package Coco\SourceWatcher\Core
+ * @package Coco\SourceWatcher\Core\Step
  */
 class Step
 {

@@ -2,7 +2,7 @@
 
 namespace Coco\SourceWatcher\Core\Transformers;
 
-use Coco\SourceWatcher\Core\SourceWatcherException;
+use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
 
 class JavaTransformerArgument
 {

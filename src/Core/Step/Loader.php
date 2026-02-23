@@ -1,13 +1,12 @@
 <?php
 
-namespace Coco\SourceWatcher\Core;
+namespace Coco\SourceWatcher\Core\Step;
 
+use Coco\SourceWatcher\Core\Data\Row;
 use Coco\SourceWatcher\Core\IO\Outputs\Output;
 
 /**
- * Class Loader
- *
- * @package Coco\SourceWatcher\Core
+ * @package Coco\SourceWatcher\Core\Step
  */
 abstract class Loader extends Step
 {

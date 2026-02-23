@@ -2,9 +2,9 @@
 
 namespace Coco\SourceWatcher\Tests\Core;
 
-use Coco\SourceWatcher\Core\Extractor;
-use Coco\SourceWatcher\Core\SourceWatcherException;
-use Coco\SourceWatcher\Core\StepLoader;
+use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
+use Coco\SourceWatcher\Core\Pipeline\StepLoader;
+use Coco\SourceWatcher\Core\Step\Extractor;
 use PHPUnit\Framework\TestCase;
 
 /**

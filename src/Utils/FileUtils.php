@@ -14,22 +14,15 @@ class FileUtils
         return join( DIRECTORY_SEPARATOR, $segments );
     }
 
-    /**
-     * // getenv("HOME") isn't set on windows and generates a Notice.
-     *
-     * @return string
-     */
     public static function getUserHomePath () : string
     {
         $home = getenv( "HOME" );
-
-        if ( empty( $home ) ) {
-            if ( !empty( $_SERVER["HOMEDRIVE"] ) && !empty( $_SERVER["HOMEPATH"] ) ) {
-                // home on windows
-                $home = $_SERVER["HOMEDRIVE"] . $_SERVER["HOMEPATH"];
-            }
+        if ( $home !== false && $home !== "" ) {
+            return $home;
         }
-
-        return empty( $home ) ? "" : $home;
+        if ( !empty( $_SERVER["HOMEDRIVE"] ) && !empty( $_SERVER["HOMEPATH"] ) ) {
+            return $_SERVER["HOMEDRIVE"] . $_SERVER["HOMEPATH"];
+        }
+        return "";
     }
 }

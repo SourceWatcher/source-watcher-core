@@ -2,10 +2,10 @@
 
 namespace Coco\SourceWatcher\Core\Loaders;
 
+use Coco\SourceWatcher\Core\Data\Row;
+use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
 use Coco\SourceWatcher\Core\IO\Outputs\DatabaseOutput;
-use Coco\SourceWatcher\Core\Loader;
-use Coco\SourceWatcher\Core\Row;
-use Coco\SourceWatcher\Core\SourceWatcherException;
+use Coco\SourceWatcher\Core\Step\Loader;
 
 /**
  * Class DatabaseLoader

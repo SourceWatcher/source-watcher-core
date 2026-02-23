@@ -3,8 +3,8 @@
 namespace Coco\SourceWatcher\Tests\Core\Database\Connections;
 
 use Coco\SourceWatcher\Core\Database\Connections\PostgreSqlConnector;
-use Coco\SourceWatcher\Core\Row;
-use Coco\SourceWatcher\Core\SourceWatcherException;
+use Coco\SourceWatcher\Core\Data\Row;
+use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
 use Coco\SourceWatcher\Tests\Common\ParentTest;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;

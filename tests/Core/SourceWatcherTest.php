@@ -5,13 +5,13 @@ namespace Coco\SourceWatcher\Tests\Core;
 use Coco\SourceWatcher\Core\Database\Connections\Connector;
 use Coco\SourceWatcher\Core\Database\Connections\MySqlConnector;
 use Coco\SourceWatcher\Core\Database\Connections\SqliteConnector;
+use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
 use Coco\SourceWatcher\Core\IO\Inputs\DatabaseInput;
 use Coco\SourceWatcher\Core\IO\Inputs\FileInput;
 use Coco\SourceWatcher\Core\IO\Outputs\DatabaseOutput;
-use Coco\SourceWatcher\Core\Pipeline;
-use Coco\SourceWatcher\Core\SourceWatcher;
-use Coco\SourceWatcher\Core\SourceWatcherException;
-use Coco\SourceWatcher\Core\StepLoader;
+use Coco\SourceWatcher\Core\Pipeline\Pipeline;
+use Coco\SourceWatcher\Core\Pipeline\SourceWatcher;
+use Coco\SourceWatcher\Core\Pipeline\StepLoader;
 use Coco\SourceWatcher\Tests\Common\ParentTest;
 
 /**

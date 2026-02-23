@@ -1,11 +1,9 @@
 <?php
 
-namespace Coco\SourceWatcher\Core;
+namespace Coco\SourceWatcher\Core\Data;
 
 /**
- * Interface ArrayListAccess
- *
- * @package Coco\SourceWatcher\Core
+ * @package Coco\SourceWatcher\Core\Data
  */
 interface ArrayListAccess
 {

@@ -2,8 +2,8 @@
 
 namespace Coco\SourceWatcher\Core\Transformers;
 
-use Coco\SourceWatcher\Core\Row;
-use Coco\SourceWatcher\Core\Transformer;
+use Coco\SourceWatcher\Core\Data\Row;
+use Coco\SourceWatcher\Core\Step\Transformer;
 
 use GenderDetector\Country;
 use GenderDetector\Gender;

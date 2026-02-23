@@ -1,9 +1,13 @@
 <?php
 
-namespace Coco\SourceWatcher\Core;
+namespace Coco\SourceWatcher\Core\Pipeline;
 
+use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
 use Coco\SourceWatcher\Core\IO\Inputs\Input;
 use Coco\SourceWatcher\Core\IO\Outputs\Output;
+use Coco\SourceWatcher\Core\Step\Extractor;
+use Coco\SourceWatcher\Core\Step\Loader;
+use Coco\SourceWatcher\Core\Step\Transformer;
 use Coco\SourceWatcher\Utils\Internationalization;
 use Ramsey\Uuid\Uuid;
 
@@ -11,7 +15,7 @@ use Ramsey\Uuid\Uuid;
 /**
  * Class SourceWatcher
  *
- * @package Coco\SourceWatcher\Core
+ * @package Coco\SourceWatcher\Core\Pipeline
  */
 class SourceWatcher
 {

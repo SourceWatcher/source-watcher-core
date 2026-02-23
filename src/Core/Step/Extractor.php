@@ -1,7 +1,8 @@
 <?php
 
-namespace Coco\SourceWatcher\Core;
+namespace Coco\SourceWatcher\Core\Step;
 
+use Coco\SourceWatcher\Core\Extractors\ApiExtractor;
 use Coco\SourceWatcher\Core\Extractors\CsvExtractor;
 use Coco\SourceWatcher\Core\Extractors\JsonExtractor;
 use Coco\SourceWatcher\Core\IO\Inputs\Input;
@@ -9,7 +10,7 @@ use Coco\SourceWatcher\Core\IO\Inputs\Input;
 /**
  * Class Extractor
  *
- * @package Coco\SourceWatcher\Core
+ * @package Coco\SourceWatcher\Core\Step
  */
 abstract class Extractor extends Step
 {
@@ -56,6 +57,11 @@ abstract class Extractor extends Step
             $fileInput = $this->getInput();
 
             $result["input"] = [ "class" => get_class( $fileInput ), "location" => $fileInput->getInput() ];
+        }
+
+        if ( $this instanceof ApiExtractor ) {
+            $apiInput = $this->getInput();
+            $result["input"] = [ "class" => get_class( $apiInput ), "url" => $apiInput->getInput() ];
         }
 
         return $result;

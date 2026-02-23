@@ -3,7 +3,7 @@
 namespace Coco\SourceWatcher\Tests\Core\Api;
 
 use Coco\SourceWatcher\Core\Api\ApiReader;
-use Coco\SourceWatcher\Core\SourceWatcherException;
+use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
 use Coco\SourceWatcher\Utils\Internationalization;
 use PHPUnit\Framework\TestCase;
 

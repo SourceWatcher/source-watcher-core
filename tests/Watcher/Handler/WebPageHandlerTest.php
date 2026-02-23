@@ -2,7 +2,7 @@
 
 namespace Coco\SourceWatcher\Tests\Watcher\Handler;
 
-use Coco\SourceWatcher\Core\SourceWatcherException;
+use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
 use Coco\SourceWatcher\Watcher\Handler\WebPageHandler;
 use PHPUnit\Framework\TestCase;
 
