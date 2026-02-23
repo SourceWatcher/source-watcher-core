@@ -12,7 +12,7 @@ This is a PHP project that allows extracting, transforming, and loading data fro
 
 ## Requirements
 
-- PHP 7.4 or later (see `composer.json` for extension requirements: curl, dom, json, pgsql, etc.)
+- PHP 8.4 or later (see `composer.json` for extension requirements: curl, dom, json, pgsql, etc.)
 - [Composer](https://getcomposer.org/)
 
 ## Installation
@@ -21,8 +21,10 @@ This is a PHP project that allows extracting, transforming, and loading data fro
 composer install
 ```
 
-If you see Scrutinizer or CI errors about the lock file not being installable on PHP 8.2, run **`composer update`** once to refresh the lock file. Without local PHP, from the repo root run:  
-`docker run --rm -v "$(pwd)":/app -w /app/source-watcher-core composer:2 composer update --no-interaction --ignore-platform-reqs`.
+If the lock file is not installable on your PHP version, run **`composer update`** once. Without local PHP, from the repo root:  
+`docker run --rm -v "$(pwd)":/app -w /app/source-watcher-core composer:2 sh -c "composer update --no-interaction --ignore-platform-reqs"`.
+
+To get a list of Scrutinizer issues without screenshots (API or local PHPStan/Psalm), see [docs/scrutinizer-issues.md](docs/scrutinizer-issues.md).
 
 ## Running tests
 
@@ -76,8 +78,8 @@ $sourceWatcher = new SourceWatcher();
 
 try {
     $sourceWatcher
-        ->extract( "Csv", new FileInput( __DIR__ . "/../data/csv/csv1.csv" ), [ "columns" => array( "name", "email" ) ] )
-        ->transform( "RenameColumns", [ "columns" => array( "email" => "email_address" ) ] )
+        ->extract( "Csv", new FileInput( __DIR__ . "/../data/csv/csv1.csv" ), [ "columns" => [ "name", "email" ] ] )
+        ->transform( "RenameColumns", [ "columns" => [ "email" => "email_address" ] ] )
         ->load( "Database", new DatabaseOutput( $mysqlConnector ) )
         ->run();
 } catch ( SourceWatcherException $exception ) {
@@ -85,7 +87,7 @@ try {
 }
 ```
 
-A functional version of the code above can be found [here](samples/Core/SourceWatcher1.php)
+A runnable version (requires `.env` with `UNIT_TEST_MYSQL_*` and a MySQL `people` table) is [samples/CsvRenameColumnsToMysql.php](samples/CsvRenameColumnsToMysql.php). More samples are listed in [samples/README.md](samples/README.md).
 
 ## Feedback
 

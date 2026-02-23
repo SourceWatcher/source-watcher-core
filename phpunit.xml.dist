@@ -8,6 +8,7 @@
 
     <logging>
         <log type="coverage-clover" target="./phpunit-report/coverage-report.xml"/>
+        <log type="coverage-html" target="./phpunit-report/coverage-html"/>
         <log type="junit" target="./phpunit-report/tests-report.xml"/>
     </logging>
 
@@ -16,4 +17,10 @@
             <directory suffix=".php">./tests</directory>
         </testsuite>
     </testsuites>
+
+    <groups>
+        <exclude>
+            <group>integration</group>
+        </exclude>
+    </groups>
 </phpunit>

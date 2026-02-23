@@ -15,7 +15,7 @@ class DatabaseOutput extends Output
 
     private array $extraConnectors = [];
 
-    public function __construct ( Connector $databaseConnector = null, Connector ...$extraConnectors )
+    public function __construct ( ?Connector $databaseConnector = null, Connector ...$extraConnectors )
     {
         $this->databaseConnector = $databaseConnector;
 

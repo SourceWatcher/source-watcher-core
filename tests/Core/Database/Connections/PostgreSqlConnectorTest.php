@@ -6,8 +6,10 @@ use Coco\SourceWatcher\Core\Database\Connections\PostgreSqlConnector;
 use Coco\SourceWatcher\Core\Row;
 use Coco\SourceWatcher\Core\SourceWatcherException;
 use Coco\SourceWatcher\Tests\Common\ParentTest;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Exception;
+use ReflectionMethod;
 
 /**
  * Class PostgreSqlConnectorTest
@@ -61,6 +63,13 @@ class PostgreSqlConnectorTest extends ParentTest
         $connector->setDefaultDatabaseName( $givenDefaultDatabaseName );
 
         $this->assertEquals( $expectedDefaultDatabaseName, $connector->getDefaultDatabaseName() );
+    }
+
+    public function testSetDefaultDatabaseNameWithNull () : void
+    {
+        $connector = new PostgreSqlConnector();
+        $connector->setDefaultDatabaseName( null );
+        $this->assertSame( "", $connector->getDefaultDatabaseName() );
     }
 
     public function testSetGetSslMode () : void
@@ -136,6 +145,49 @@ class PostgreSqlConnectorTest extends ParentTest
     }
 
     /**
+     * getConnectionParameters returns params including Postgres-specific keys
+     */
+    public function testGetConnectionParameters () : void
+    {
+        $connector = new PostgreSqlConnector();
+        $connector->setUser( "u" );
+        $connector->setPassword( "p" );
+        $connector->setHost( "localhost" );
+        $connector->setPort( 5432 );
+        $connector->setDbName( "db" );
+        $connector->setCharset( "utf8" );
+        $connector->setDefaultDatabaseName( "mydb" );
+        $connector->setApplicationName( "test" );
+
+        $params = $connector->getConnectionParameters();
+
+        $this->assertIsArray( $params );
+        $this->assertArrayHasKey( "charset", $params );
+        $this->assertSame( "utf8", $params["charset"] );
+        $this->assertArrayHasKey( "default_dbname", $params );
+        $this->assertSame( "mydb", $params["default_dbname"] );
+        $this->assertArrayHasKey( "application_name", $params );
+        $this->assertSame( "test", $params["application_name"] );
+    }
+
+    /**
+     * executeExtraStatements is invoked (covers empty implementation)
+     */
+    public function testExecuteExtraStatements () : void
+    {
+        $connector = new PostgreSqlConnector();
+        $connection = $this->createMock( Connection::class );
+
+        $method = new ReflectionMethod( PostgreSqlConnector::class, "executeExtraStatements" );
+        if ( PHP_VERSION_ID < 80100 ) {
+            $method->setAccessible( true );
+        }
+        $method->invoke( $connector, $connection );
+
+        $this->addToAssertionCount( 1 );
+    }
+
+    /**
      * @throws Exception
      */
     public function testGetConnection () : void
@@ -160,6 +212,7 @@ class PostgreSqlConnectorTest extends ParentTest
 
     /**
      * @throws SourceWatcherException
+     * @group integration
      */
     public function testInsertUsingEnvironmentVariables () : void
     {

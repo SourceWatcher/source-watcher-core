@@ -18,10 +18,22 @@ class DatabaseOutputTests extends TestCase
         $databaseOutput = new DatabaseOutput();
 
         $givenOutput = $this->createMock( Connector::class );
-        $expectedOutput = $this->createMock( Connector::class );
-
         $databaseOutput->setOutput( $givenOutput );
 
-        $this->assertEquals( [ $expectedOutput ], $databaseOutput->getOutput() );
+        $output = $databaseOutput->getOutput();
+        $this->assertCount( 1, $output );
+        $this->assertSame( $givenOutput, $output[0] );
+    }
+
+    public function testConstructorWithExtraConnectors () : void
+    {
+        $primary = $this->createMock( Connector::class );
+        $extra = $this->createMock( Connector::class );
+        $databaseOutput = new DatabaseOutput( $primary, $extra );
+
+        $output = $databaseOutput->getOutput();
+        $this->assertCount( 2, $output );
+        $this->assertSame( $primary, $output[0] );
+        $this->assertSame( $extra, $output[1] );
     }
 }

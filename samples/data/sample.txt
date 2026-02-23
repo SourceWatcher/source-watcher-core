@@ -1,0 +1,3 @@
+First line of sample text.
+Second line.
+Third line.

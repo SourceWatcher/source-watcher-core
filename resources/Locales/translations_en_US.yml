@@ -24,10 +24,4 @@ Coco:
       Utils:
         InternationalizationTest:
           This_Is_A_Test_Entry: This is a test entry!
-    Watcher:
-      Communicator:
-        SlackCommunicator:
-          No_Web_Hook: A web hook url must be defined first.
-          No_Method: A method must be defined first.
-          No_Content_Type: A content type be defined first.
-          No_Data: Data must be defined first.
+    Watcher: {}

@@ -10,16 +10,13 @@
         }
     ],
     "require": {
-        "php": ">=7.4",
+        "php": "^8.4",
         "doctrine/dbal": "^3.0 || ^4.0",
         "ext-curl": "*",
         "ext-dom": "*",
         "ext-json": "*",
         "ext-pgsql": "*",
-        "guzzlehttp/guzzle": "^7.0",
-        "malios/php-to-ascii-table": "^3.0",
         "monolog/monolog": "^2.0 || ^3.0",
-        "php-snippets/circular-array": "^1.0",
         "ramsey/uuid": "^4.0 || ^5.0",
         "softcreatr/jsonpath": "^0.6.0",
         "symfony/yaml": "^5.0 || ^6.0",
@@ -40,5 +37,9 @@
     "require-dev": {
         "phpspec/prophecy": "^1.16",
         "phpunit/phpunit": "^9.5"
+    },
+    "scripts": {
+        "post-install-cmd": ["@php scripts/patch-jsonpath-deprecations.php"],
+        "post-update-cmd": ["@php scripts/patch-jsonpath-deprecations.php"]
     }
 }

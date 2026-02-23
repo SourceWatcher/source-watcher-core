@@ -20,9 +20,9 @@ abstract class ClientServerDatabaseConnector extends Connector
         return $this->host;
     }
 
-    public function setHost ( string $host ) : void
+    public function setHost ( ?string $host ) : void
     {
-        $this->host = $host;
+        $this->host = $host ?? "";
     }
 
     public function getPort () : int
@@ -40,9 +40,9 @@ abstract class ClientServerDatabaseConnector extends Connector
         return $this->dbName;
     }
 
-    public function setDbName ( string $dbName ) : void
+    public function setDbName ( ?string $dbName ) : void
     {
-        $this->dbName = $dbName;
+        $this->dbName = $dbName ?? "";
     }
 
     protected array $extraParameters;

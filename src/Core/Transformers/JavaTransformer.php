@@ -67,20 +67,33 @@ class JavaTransformer extends Transformer
         }
     }
 
-    public function transform ( Row $row )
+    /**
+     * Run the Java command. Override in tests to avoid exec().
+     *
+     * @return array{0: array<string>, 1: int}
+     */
+    protected function runCommand ( string $command ) : array
+    {
+        $output = [];
+        $returnValue = -1;
+        exec( $command, $output, $returnValue );
+        return [ $output, $returnValue ];
+    }
+
+    public function transform ( Row $row ) : void
     {
         $this->setLogHandler();
 
         $command = $this->getCommand( $row );
         $this->logger->debug( $command );
 
-        exec( $command, $output, $returnValue );
+        [ $output, $returnValue ] = $this->runCommand( $command );
 
         $this->logger->debug( print_r( $output, true ) );
-        $this->logger->debug( $returnValue );
+        $this->logger->debug( (string) $returnValue );
 
-        if ( $returnValue == 0 ) {
-            if ( $this->resultType == JavaTransformerResultType::RESULT_TYPE_JSON ) {
+        if ( $returnValue === 0 ) {
+            if ( $this->resultType === JavaTransformerResultType::RESULT_TYPE_JSON && isset( $output[0] ) ) {
                 $array = json_decode( $output[0], true );
 
                 if ( !empty( $array ) && is_array( $array ) ) {
@@ -90,7 +103,10 @@ class JavaTransformer extends Transformer
                 }
             }
         } else {
-            echo "returnValue = $returnValue for " . print_r( $row, true ) . PHP_EOL;
+            $this->logger->error( "JavaTransformer non-zero return: {returnValue} for row", [
+                'returnValue' => $returnValue,
+                'row' => $row->getAttributes(),
+            ] );
         }
     }
 }

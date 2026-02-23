@@ -190,7 +190,7 @@ class CsvExtractor extends Extractor
     private function generateColumns ( $fileHandler ) : array
     {
         // The goal will be to represent the keys in format [key1 -> 1, key2 -> 2, ... keyN -> N]
-        $columnsArrayFlipped = array_flip( str_getcsv( fgets( $fileHandler ), $this->delimiter, $this->enclosure ) );
+        $columnsArrayFlipped = array_flip( str_getcsv( fgets( $fileHandler ), $this->delimiter, $this->enclosure, '\\' ) );
 
         foreach ( $columnsArrayFlipped as $key => $index ) {
             $columnsArrayFlipped[$key] = $index + 1;
@@ -219,7 +219,7 @@ class CsvExtractor extends Extractor
     {
         $resultRow = [];
 
-        $rowArray = str_getcsv( $rowString, $this->delimiter, $this->enclosure );
+        $rowArray = str_getcsv( $rowString, $this->delimiter, $this->enclosure, '\\' );
 
         foreach ( $columns as $column => $index ) {
             if ( !array_key_exists( $index - 1, $rowArray ) ) {

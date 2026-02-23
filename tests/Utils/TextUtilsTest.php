@@ -31,4 +31,20 @@ class TextUtilsTest extends TestCase
 
         $this->assertEquals( $expected, $textUtils->textToPascalCase( $given ) );
     }
+
+    public function testFromCamelToSnakeCase () : void
+    {
+        $textUtils = new TextUtils();
+        $this->assertSame( "camel_case", $textUtils->fromCamelToSnakeCase( "camelCase" ) );
+        $this->assertSame( "simple", $textUtils->fromCamelToSnakeCase( "simple" ) );
+    }
+
+    /**
+     * All-caps token in camelCase (e.g. URL, ID) uses strtolower branch
+     */
+    public function testFromCamelToSnakeCaseWithAllCapsSegment () : void
+    {
+        $textUtils = new TextUtils();
+        $this->assertSame( "get_url_path", $textUtils->fromCamelToSnakeCase( "getURLPath" ) );
+    }
 }

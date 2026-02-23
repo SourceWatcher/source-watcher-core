@@ -3,6 +3,7 @@
 namespace Coco\SourceWatcher\Tests\Common;
 
 use Dotenv\Dotenv;
+use Dotenv\Exception\InvalidPathException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -20,10 +21,14 @@ class ParentTest extends TestCase
         if ( $keyExists ) {
             $value = $_ENV[$variableName];
         } else {
-            $dotenv = Dotenv::createImmutable( __DIR__ . "/../../" );
-            $dotenv->load();
+            try {
+                $dotenv = Dotenv::createImmutable( __DIR__ . "/../../" );
+                $dotenv->load();
+            } catch ( InvalidPathException $e ) {
+                // .env missing (e.g. in CI/Docker); use default when var not in $_ENV
+            }
 
-            $value = getenv( $variableName );
+            $value = getenv( $variableName ) ?: $_ENV[$variableName] ?? null;
 
             if ( empty( $value ) ) {
                 $value = $default;

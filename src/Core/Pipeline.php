@@ -7,6 +7,7 @@ use Coco\SourceWatcher\Core\IO\Inputs\ExtractorResultInput;
 use Coco\SourceWatcher\Utils\FileUtils;
 use Exception;
 use Iterator;
+use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
@@ -27,10 +28,15 @@ class Pipeline implements Iterator
     {
         $this->logger = new Logger( "Connector" );
 
-        $streamPath = FileUtils::file_build_path( __DIR__, "..", "..", "..", "..", "logs",
+        $logsDir = FileUtils::file_build_path( __DIR__, "..", "..", "..", "..", "logs" );
+        $streamPath = FileUtils::file_build_path( $logsDir,
             "Connector" . "-" . gmdate( "Y-m-d-H-i-s", time() ) . "-" . getmypid() . ".txt" );
 
-        $this->logger->pushHandler( new StreamHandler( $streamPath ), Logger::DEBUG );
+        if ( ( is_dir( $logsDir ) || @mkdir( $logsDir, 0755, true ) ) && is_writable( $logsDir ) ) {
+            $this->logger->pushHandler( new StreamHandler( $streamPath ), Logger::DEBUG );
+        } else {
+            $this->logger->pushHandler( new NullHandler(), Logger::DEBUG );
+        }
     }
 
     public function getSteps () : array
@@ -54,19 +60,19 @@ class Pipeline implements Iterator
 
     public function execute () : void
     {
-        foreach ( $this->steps as $index => $currentStep ) {
+        foreach ( $this->steps as $currentStep ) {
             if ( $currentStep instanceof Extractor ) {
                 $this->results = $currentStep->extract();
             }
 
             if ( $currentStep instanceof Transformer ) {
-                foreach ( $this->results as $currentIndex => $currentItem ) {
-                    $currentStep->transform( $this->results[$currentIndex] );
+                foreach ( $this->results as $currentItem ) {
+                    $currentStep->transform( $currentItem );
                 }
             }
 
             if ( $currentStep instanceof Loader ) {
-                foreach ( $this->results as $currentIndex => $currentItem ) {
+                foreach ( $this->results as $currentItem ) {
                     try {
                         $currentStep->load( $currentItem );
                     } catch ( Exception $exception ) {
@@ -84,27 +90,27 @@ class Pipeline implements Iterator
 
     private int $index = 0;
 
-    public function current ()
+    public function current () : mixed
     {
         return $this->results[$this->index];
     }
 
-    public function next ()
+    public function next () : void
     {
         $this->index++;
     }
 
-    public function key ()
+    public function key () : int
     {
         return $this->index;
     }
 
-    public function valid ()
+    public function valid () : bool
     {
-        return isset( $this->results[$this->key()] );
+        return isset( $this->results[$this->index] );
     }
 
-    public function rewind ()
+    public function rewind () : void
     {
         $this->index = 0;
     }
