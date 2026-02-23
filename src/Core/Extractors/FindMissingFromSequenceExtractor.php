@@ -2,8 +2,8 @@
 
 namespace Coco\SourceWatcher\Core\Extractors;
 
-use Coco\SourceWatcher\Core\Row;
-use Coco\SourceWatcher\Core\SourceWatcherException;
+use Coco\SourceWatcher\Core\Data\Row;
+use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
 
 /**
  * Class FindMissingFromSequenceExtractor

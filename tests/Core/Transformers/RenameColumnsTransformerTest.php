@@ -4,7 +4,7 @@ namespace Coco\SourceWatcher\Tests\Core\Transformers;
 
 use PHPUnit\Framework\TestCase;
 use Coco\SourceWatcher\Core\Transformers\RenameColumnsTransformer;
-use Coco\SourceWatcher\Core\Row;
+use Coco\SourceWatcher\Core\Data\Row;
 
 /**
  * Class RenameColumnsTransformerTest

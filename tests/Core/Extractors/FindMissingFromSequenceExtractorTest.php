@@ -2,10 +2,10 @@
 
 namespace Coco\SourceWatcher\Tests\Core\Extractors;
 
-use Coco\SourceWatcher\Core\Extractor;
+use Coco\SourceWatcher\Core\Data\Row;
 use Coco\SourceWatcher\Core\Extractors\FindMissingFromSequenceExtractor;
 use Coco\SourceWatcher\Core\IO\Inputs\ExtractorResultInput;
-use Coco\SourceWatcher\Core\Row;
+use Coco\SourceWatcher\Core\Step\Extractor;
 use PHPUnit\Framework\TestCase;
 
 /** Stub for testing extractors that consume another extractor's result. */

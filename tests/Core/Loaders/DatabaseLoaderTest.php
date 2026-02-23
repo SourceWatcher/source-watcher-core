@@ -6,8 +6,8 @@ use Coco\SourceWatcher\Core\Database\Connections\Connector;
 use Coco\SourceWatcher\Core\IO\Outputs\DatabaseOutput;
 use Coco\SourceWatcher\Core\IO\Outputs\Output;
 use Coco\SourceWatcher\Core\Loaders\DatabaseLoader;
-use Coco\SourceWatcher\Core\Row;
-use Coco\SourceWatcher\Core\SourceWatcherException;
+use Coco\SourceWatcher\Core\Data\Row;
+use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
 use PHPUnit\Framework\TestCase;
 
 /**

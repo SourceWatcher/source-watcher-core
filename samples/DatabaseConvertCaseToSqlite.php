@@ -10,8 +10,8 @@ require_once __DIR__ . "/bootstrap.php";
 use Coco\SourceWatcher\Core\Database\Connections\SqliteConnector;
 use Coco\SourceWatcher\Core\IO\Inputs\DatabaseInput;
 use Coco\SourceWatcher\Core\IO\Outputs\DatabaseOutput;
-use Coco\SourceWatcher\Core\SourceWatcher;
-use Coco\SourceWatcher\Core\SourceWatcherException;
+use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
+use Coco\SourceWatcher\Core\Pipeline\SourceWatcher;
 use Coco\SourceWatcher\Core\Transformers\ConvertCaseTransformer;
 
 $sqlitePath = __DIR__ . "/data/sqlite/people-db.sqlite";

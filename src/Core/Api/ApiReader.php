@@ -2,7 +2,7 @@
 
 namespace Coco\SourceWatcher\Core\Api;
 
-use Coco\SourceWatcher\Core\SourceWatcherException;
+use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
 use Coco\SourceWatcher\Utils\Internationalization;
 
 /**

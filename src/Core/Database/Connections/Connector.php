@@ -2,8 +2,8 @@
 
 namespace Coco\SourceWatcher\Core\Database\Connections;
 
-use Coco\SourceWatcher\Core\Row;
-use Coco\SourceWatcher\Core\SourceWatcherException;
+use Coco\SourceWatcher\Core\Data\Row;
+use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
 use Coco\SourceWatcher\Utils\FileUtils;
 use Coco\SourceWatcher\Utils\Internationalization;
 use Doctrine\DBAL\Connection;
@@ -97,7 +97,13 @@ abstract class Connector
         return DriverManager::getConnection( $this->getConnectionParameters() );
     }
 
-    protected abstract function executeExtraStatements ( Connection $connection ) : void;
+    /**
+     * Override in subclasses to run statements after obtaining the connection (e.g. SET SESSION).
+     * Default is a no-op.
+     */
+    protected function executeExtraStatements ( Connection $connection ) : void
+    {
+    }
 
     /** @throws SourceWatcherException */
     public function insert ( Row $row ) : int

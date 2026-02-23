@@ -4,7 +4,7 @@ namespace Coco\SourceWatcher\Tests\Core\Transformers;
 
 use Coco\SourceWatcher\Core\Transformers\JavaTransformerArgument;
 use Coco\SourceWatcher\Core\Transformers\JavaTransformerArgumentType;
-use Coco\SourceWatcher\Core\SourceWatcherException;
+use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
 use PHPUnit\Framework\TestCase;
 
 class JavaTransformerArgumentTest extends TestCase

@@ -4,8 +4,8 @@ namespace Coco\SourceWatcher\Tests\Core\Extractors;
 
 use Coco\SourceWatcher\Core\Extractors\TxtExtractor;
 use Coco\SourceWatcher\Core\IO\Inputs\FileInput;
-use Coco\SourceWatcher\Core\Row;
-use Coco\SourceWatcher\Core\SourceWatcherException;
+use Coco\SourceWatcher\Core\Data\Row;
+use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
 use PHPUnit\Framework\TestCase;
 
 class TxtExtractorTest extends TestCase

@@ -5,7 +5,7 @@ namespace Coco\SourceWatcher\Tests\Core\Database\Connections;
 use Coco\SourceWatcher\Core\Database\Connections\Connector;
 use Coco\SourceWatcher\Core\Database\Connections\MySqlConnector;
 use Coco\SourceWatcher\Core\Database\Connections\SqliteConnector;
-use Coco\SourceWatcher\Core\SourceWatcherException;
+use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
 use Doctrine\DBAL\Connection;
 use Exception;
 use PHPUnit\Framework\TestCase;
@@ -92,9 +92,9 @@ class ConnectorTest extends TestCase
         $connector->setDbName( "d" );
         $connector->setTableName( "" );
 
-        $this->expectException( \Coco\SourceWatcher\Core\SourceWatcherException::class );
+        $this->expectException( \Coco\SourceWatcher\Core\Exception\SourceWatcherException::class );
         $this->expectExceptionMessage( "table name" );
-        $connector->insert( new \Coco\SourceWatcher\Core\Row( [ "id" => 1 ] ) );
+        $connector->insert( new \Coco\SourceWatcher\Core\Data\Row( [ "id" => 1 ] ) );
     }
 
     /**

@@ -10,8 +10,8 @@ require_once __DIR__ . "/bootstrap.php";
 use Coco\SourceWatcher\Core\Database\Connections\SqliteConnector;
 use Coco\SourceWatcher\Core\IO\Inputs\FileInput;
 use Coco\SourceWatcher\Core\IO\Outputs\DatabaseOutput;
-use Coco\SourceWatcher\Core\SourceWatcher;
-use Coco\SourceWatcher\Core\SourceWatcherException;
+use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
+use Coco\SourceWatcher\Core\Pipeline\SourceWatcher;
 
 $sqlitePath = __DIR__ . "/data/sqlite/lines-out.sqlite";
 $dataDir   = dirname( $sqlitePath );

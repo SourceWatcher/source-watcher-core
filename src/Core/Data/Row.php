@@ -1,12 +1,11 @@
 <?php
 
-namespace Coco\SourceWatcher\Core;
+namespace Coco\SourceWatcher\Core\Data;
 
 use ArrayAccess;
 
 /**
- * Class Row
- * @package Coco\SourceWatcher\Core
+ * @package Coco\SourceWatcher\Core\Data
  */
 class Row implements ArrayAccess, ArrayListAccess
 {

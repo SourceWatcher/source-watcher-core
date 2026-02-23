@@ -5,10 +5,10 @@ namespace Coco\SourceWatcher\Tests\Core;
 use Coco\SourceWatcher\Core\Extractors\CsvExtractor;
 use Coco\SourceWatcher\Core\Extractors\FindMissingFromSequenceExtractor;
 use Coco\SourceWatcher\Core\IO\Inputs\FileInput;
-use Coco\SourceWatcher\Core\Loader;
 use Coco\SourceWatcher\Core\Loaders\DatabaseLoader;
-use Coco\SourceWatcher\Core\Pipeline;
-use Coco\SourceWatcher\Core\Transformer;
+use Coco\SourceWatcher\Core\Pipeline\Pipeline;
+use Coco\SourceWatcher\Core\Step\Loader;
+use Coco\SourceWatcher\Core\Step\Transformer;
 use Coco\SourceWatcher\Core\Transformers\RenameColumnsTransformer;
 use PHPUnit\Framework\TestCase;
 

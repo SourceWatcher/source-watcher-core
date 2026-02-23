@@ -1,9 +1,13 @@
 <?php
 
-namespace Coco\SourceWatcher\Core;
+namespace Coco\SourceWatcher\Core\Pipeline;
 
 use Coco\SourceWatcher\Core\Extractors\ExecutionExtractor;
 use Coco\SourceWatcher\Core\IO\Inputs\ExtractorResultInput;
+use Coco\SourceWatcher\Core\Step\Extractor;
+use Coco\SourceWatcher\Core\Step\Loader;
+use Coco\SourceWatcher\Core\Step\Step;
+use Coco\SourceWatcher\Core\Step\Transformer;
 use Coco\SourceWatcher\Utils\FileUtils;
 use Exception;
 use Iterator;
@@ -14,7 +18,7 @@ use Monolog\Logger;
 /**
  * Class Pipeline
  *
- * @package Coco\SourceWatcher\Core
+ * @package Coco\SourceWatcher\Core\Pipeline
  */
 class Pipeline implements Iterator
 {
@@ -32,7 +36,7 @@ class Pipeline implements Iterator
         $this->logger = new Logger( "Connector" );
 
         if ( $logsDir === null ) {
-            $logsDir = FileUtils::file_build_path( __DIR__, "..", "..", "..", "..", "logs" );
+            $logsDir = FileUtils::file_build_path( __DIR__, "..", "..", "..", "logs" );
         }
         $streamPath = FileUtils::file_build_path( $logsDir,
             "Connector" . "-" . gmdate( "Y-m-d-H-i-s", time() ) . "-" . getmypid() . ".txt" );

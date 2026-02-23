@@ -1,7 +1,9 @@
 <?php
 
-namespace Coco\SourceWatcher\Core;
+namespace Coco\SourceWatcher\Core\Pipeline;
 
+use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
+use Coco\SourceWatcher\Core\Step\Step;
 use Coco\SourceWatcher\Utils\TextUtils;
 use ReflectionClass;
 use ReflectionException;
@@ -9,7 +11,7 @@ use ReflectionException;
 /**
  * Class StepLoader
  *
- * @package Coco\SourceWatcher\Core
+ * @package Coco\SourceWatcher\Core\Pipeline
  */
 class StepLoader
 {

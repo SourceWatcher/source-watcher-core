@@ -16,10 +16,11 @@ Coco:
           Input_Not_Instance_Of_File_Input: The input must be an instance of %s.
           File_Input_File_Not_Found: The file %s could not be found.
           JSON_Path_Exception: Something went wrong trying to extract the JSON file %s.
-      SourceWatcher:
-        Extractor_Not_Found: The extractor %s can't be found.
-        Transformer_Not_Found: The transformer %s can't be found.
-        Loader_Not_Found: The loader %s can't be found.
+      Pipeline:
+        SourceWatcher:
+          Extractor_Not_Found: The extractor %s can't be found.
+          Transformer_Not_Found: The transformer %s can't be found.
+          Loader_Not_Found: The loader %s can't be found.
     Tests:
       Utils:
         InternationalizationTest:

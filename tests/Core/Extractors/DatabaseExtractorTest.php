@@ -7,7 +7,7 @@ use Coco\SourceWatcher\Core\Database\Connections\SqliteConnector;
 use Coco\SourceWatcher\Core\Extractors\DatabaseExtractor;
 use Coco\SourceWatcher\Core\IO\Inputs\DatabaseInput;
 use Coco\SourceWatcher\Core\IO\Inputs\FileInput;
-use Coco\SourceWatcher\Core\SourceWatcherException;
+use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
 use Coco\SourceWatcher\Tests\Common\ParentTest;
 
 /**
