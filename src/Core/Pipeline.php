@@ -24,11 +24,16 @@ class Pipeline implements Iterator
 
     private Logger $logger;
 
-    public function __construct ()
+    /**
+     * @param string|null $logsDir Optional logs directory (default: project logs/). Pass a path that cannot be created to force NullHandler in tests.
+     */
+    public function __construct ( ?string $logsDir = null )
     {
         $this->logger = new Logger( "Connector" );
 
-        $logsDir = FileUtils::file_build_path( __DIR__, "..", "..", "..", "..", "logs" );
+        if ( $logsDir === null ) {
+            $logsDir = FileUtils::file_build_path( __DIR__, "..", "..", "..", "..", "logs" );
+        }
         $streamPath = FileUtils::file_build_path( $logsDir,
             "Connector" . "-" . gmdate( "Y-m-d-H-i-s", time() ) . "-" . getmypid() . ".txt" );
 

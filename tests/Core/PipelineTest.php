@@ -144,27 +144,18 @@ class PipelineTest extends TestCase
     }
 
     /**
-     * When logs directory is missing or not writable, Pipeline uses NullHandler (e.g. CI); no exception
+     * When logs directory cannot be created or is not writable, Pipeline uses NullHandler (e.g. CI); no exception
      */
     public function testPipelineConstructsWhenLogsDirNotWritable () : void
     {
-        $projectRoot = realpath( __DIR__ . "/../.." );
-        $logsDir = $projectRoot . DIRECTORY_SEPARATOR . "logs";
-        $existed = is_dir( $logsDir );
-        if ( !$existed ) {
-            @mkdir( $logsDir, 0755, true );
-        }
-        $originalMode = fileperms( $logsDir );
-        @chmod( $logsDir, 0444 );
+        $pathAsFile = sys_get_temp_dir() . DIRECTORY_SEPARATOR . "pipeline-logs-" . getmypid();
+        touch( $pathAsFile );
         try {
-            $pipeline = new Pipeline();
+            $pipeline = new Pipeline( $pathAsFile );
             $pipeline->setSteps( [] );
             $this->assertFalse( $pipeline->valid() );
         } finally {
-            @chmod( $logsDir, $originalMode );
-            if ( !$existed && is_dir( $logsDir ) ) {
-                @rmdir( $logsDir );
-            }
+            @unlink( $pathAsFile );
         }
     }
 }

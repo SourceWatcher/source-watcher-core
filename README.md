@@ -24,8 +24,6 @@ composer install
 If the lock file is not installable on your PHP version, run **`composer update`** once. Without local PHP, from the repo root:  
 `docker run --rm -v "$(pwd)":/app -w /app/source-watcher-core composer:2 sh -c "composer update --no-interaction --ignore-platform-reqs"`.
 
-To get a list of Scrutinizer issues without screenshots (API or local PHPStan/Psalm), see [docs/scrutinizer-issues.md](docs/scrutinizer-issues.md).
-
 ## Running tests
 
 ```bash
