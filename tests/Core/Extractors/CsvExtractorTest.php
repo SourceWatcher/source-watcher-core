@@ -23,11 +23,8 @@ class CsvExtractorTest extends TestCase
     private string $emailIndex;
     private string $emailAddressIndex;
 
-    private string $johnDoeName;
-    private string $johnDoeEmailAddress;
-
-    private string $janeDoeName;
-    private string $janeDoeEmailAddress;
+    /** @var array<int, array<string, mixed>> */
+    private array $allRowsExpected;
 
     public function setUp () : void
     {
@@ -38,11 +35,15 @@ class CsvExtractorTest extends TestCase
         $this->emailIndex = "email";
         $this->emailAddressIndex = "email_address";
 
-        $this->johnDoeName = "John Doe";
-        $this->johnDoeEmailAddress = "johndoe@email.com";
-
-        $this->janeDoeName = "Jane Doe";
-        $this->janeDoeEmailAddress = "janedoe@email.com";
+        $this->allRowsExpected = [
+            [ "id" => 9, "name" => "Avery", "email" => "avery@example.com" ],
+            [ "id" => 7, "name" => "Geirþrúður", "email" => "geirthrudur@example.com" ],
+            [ "id" => 4, "name" => "Jane", "email" => "jane@example.com" ],
+            [ "id" => 3, "name" => "John", "email" => "john@example.com" ],
+            [ "id" => 6, "name" => "Maria", "email" => "maria@example.com" ],
+            [ "id" => 5, "name" => "Robin", "email" => "robin@example.com" ],
+            [ "id" => 8, "name" => "Thomas", "email" => "thomas@example.com" ],
+        ];
     }
 
     public function testSetGetColumns () : void
@@ -123,18 +124,13 @@ class CsvExtractorTest extends TestCase
     {
         $csvExtractor = new CsvExtractor();
 
-        $expected = [
-            new Row( [
-                $this->idIndex => 1,
-                $this->nameIndex => $this->johnDoeName,
-                $this->emailIndex => $this->johnDoeEmailAddress
-            ] ),
-            new Row( [
-                $this->idIndex => 2,
-                $this->nameIndex => $this->janeDoeName,
-                $this->emailIndex => $this->janeDoeEmailAddress
-            ] )
-        ];
+        $expected = array_map( function ( array $row ) {
+            return new Row( [
+                $this->idIndex => $row["id"],
+                $this->nameIndex => $row["name"],
+                $this->emailIndex => $row["email"]
+            ] );
+        }, $this->allRowsExpected );
 
         $csvExtractor->setInput( new FileInput( $this->csvLocation ) );
 
@@ -150,10 +146,9 @@ class CsvExtractorTest extends TestCase
         $csvExtractor->setColumns( [ $this->idIndex, $this->emailIndex ] );
         $csvExtractor->setInput( new FileInput( $this->csvLocation ) );
 
-        $expected = [
-            new Row( [ $this->idIndex => 1, $this->emailIndex => $this->johnDoeEmailAddress ] ),
-            new Row( [ $this->idIndex => 2, $this->emailIndex => $this->janeDoeEmailAddress ] )
-        ];
+        $expected = array_map( function ( array $row ) {
+            return new Row( [ $this->idIndex => $row["id"], $this->emailIndex => $row["email"] ] );
+        }, $this->allRowsExpected );
 
         $this->assertEquals( $expected, $csvExtractor->extract() );
     }
@@ -167,18 +162,13 @@ class CsvExtractorTest extends TestCase
         $csvExtractor->setColumns( [ $this->idIndex, $this->nameIndex, $this->emailIndex ] );
         $csvExtractor->setInput( new FileInput( $this->csvLocation ) );
 
-        $expected = [
-            new Row( [
-                $this->idIndex => 1,
-                $this->nameIndex => $this->johnDoeName,
-                $this->emailIndex => $this->johnDoeEmailAddress
-            ] ),
-            new Row( [
-                $this->idIndex => 2,
-                $this->nameIndex => $this->janeDoeName,
-                $this->emailIndex => $this->janeDoeEmailAddress
-            ] )
-        ];
+        $expected = array_map( function ( array $row ) {
+            return new Row( [
+                $this->idIndex => $row["id"],
+                $this->nameIndex => $row["name"],
+                $this->emailIndex => $row["email"]
+            ] );
+        }, $this->allRowsExpected );
 
         $this->assertEquals( $expected, $csvExtractor->extract() );
     }
@@ -195,10 +185,9 @@ class CsvExtractorTest extends TestCase
         ] );
         $csvExtractor->setInput( new FileInput( $this->csvLocation ) );
 
-        $expected = [
-            new Row( [ $this->idIndex => 1, $this->emailAddressIndex => $this->johnDoeEmailAddress ] ),
-            new Row( [ $this->idIndex => 2, $this->emailAddressIndex => $this->janeDoeEmailAddress ] )
-        ];
+        $expected = array_map( function ( array $row ) {
+            return new Row( [ $this->idIndex => $row["id"], $this->emailAddressIndex => $row["email"] ] );
+        }, $this->allRowsExpected );
 
         $this->assertEquals( $expected, $csvExtractor->extract() );
     }

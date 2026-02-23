@@ -135,7 +135,11 @@ abstract class Connector
 
             $statement = $connection->executeQuery( $query );
 
-            return $statement->fetchAllAssociative();
+            $result = $statement->fetchAllAssociative();
+
+            $connection->close();
+
+            return $result;
         } catch ( \Doctrine\DBAL\Driver\Exception $e ) {
             throw new SourceWatcherException( "Something went wrong: " . $e->getMessage(), 0, $e );
         } catch ( Exception $e ) {
