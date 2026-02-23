@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "php": ">=7.4",
+        "php": "^8.4",
         "doctrine/dbal": "^3.0 || ^4.0",
         "ext-curl": "*",
         "ext-dom": "*",
