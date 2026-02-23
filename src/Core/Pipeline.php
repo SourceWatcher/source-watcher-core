@@ -7,6 +7,7 @@ use Coco\SourceWatcher\Core\IO\Inputs\ExtractorResultInput;
 use Coco\SourceWatcher\Utils\FileUtils;
 use Exception;
 use Iterator;
+use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
@@ -27,10 +28,15 @@ class Pipeline implements Iterator
     {
         $this->logger = new Logger( "Connector" );
 
-        $streamPath = FileUtils::file_build_path( __DIR__, "..", "..", "..", "..", "logs",
+        $logsDir = FileUtils::file_build_path( __DIR__, "..", "..", "..", "..", "logs" );
+        $streamPath = FileUtils::file_build_path( $logsDir,
             "Connector" . "-" . gmdate( "Y-m-d-H-i-s", time() ) . "-" . getmypid() . ".txt" );
 
-        $this->logger->pushHandler( new StreamHandler( $streamPath ), Logger::DEBUG );
+        if ( ( is_dir( $logsDir ) || @mkdir( $logsDir, 0755, true ) ) && is_writable( $logsDir ) ) {
+            $this->logger->pushHandler( new StreamHandler( $streamPath ), Logger::DEBUG );
+        } else {
+            $this->logger->pushHandler( new NullHandler(), Logger::DEBUG );
+        }
     }
 
     public function getSteps () : array
