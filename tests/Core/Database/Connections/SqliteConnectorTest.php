@@ -95,14 +95,13 @@ class SqliteConnectorTest extends TestCase
     }
 
     /**
+     * When a non-existing table name is given, the connector now creates the table
+     * automatically and performs the insert instead of throwing.
+     *
      * @throws SourceWatcherException
      */
     public function testInsertUsingWrongConnectionParameters () : void
     {
-        $this->expectException( SourceWatcherException::class );
-        $this->expectExceptionMessage( Internationalization::getInstance()->getText( Connector::class,
-            "Unexpected_Error" ) );
-
         $connector = new SqliteConnector();
         $connector->setPath( $this->sqliteDbLocation );
         $connector->setMemory( false );
@@ -114,7 +113,7 @@ class SqliteConnectorTest extends TestCase
             $this->emailAddressIndex => $this->johnDoeEmailAddress
         ] );
 
-        $connector->insert( $row );
+        $this->assertEquals( 1, $connector->insert( $row ) );
     }
 
     /**
