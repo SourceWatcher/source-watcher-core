@@ -8,6 +8,7 @@ use Coco\SourceWatcher\Utils\FileUtils;
 use Coco\SourceWatcher\Utils\Internationalization;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Exception;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -105,6 +106,34 @@ abstract class Connector
     {
     }
 
+    /**
+     * Create the table if it does not exist, using the given column names (all as TEXT for portability).
+     * No-op if the table already exists.
+     *
+     * @param Connection $connection
+     * @param array<int, string> $columnNames
+     * @throws \Doctrine\DBAL\Exception
+     */
+    protected function ensureTableExists ( Connection $connection, array $columnNames ) : void
+    {
+        if ( $columnNames === [] ) {
+            return;
+        }
+
+        $platform = $connection->getDatabasePlatform();
+        if ( !$platform instanceof AbstractPlatform ) {
+            return;
+        }
+
+        $quotedTable = $platform->quoteSingleIdentifier( $this->tableName );
+        $defs = [];
+        foreach ( $columnNames as $name ) {
+            $defs[] = $platform->quoteSingleIdentifier( $name ) . ' TEXT';
+        }
+        $sql = 'CREATE TABLE IF NOT EXISTS ' . $quotedTable . ' (' . implode( ', ', $defs ) . ')';
+        $connection->executeStatement( $sql );
+    }
+
     /** @throws SourceWatcherException */
     public function insert ( Row $row ) : int
     {
@@ -117,6 +146,8 @@ abstract class Connector
             $this->connection = $this->bulkInsert ? ( $this->connection ?? $this->getNewConnection() ) : $this->getNewConnection();
 
             $this->executeExtraStatements( $this->connection );
+
+            $this->ensureTableExists( $this->connection, array_keys( $row->getAttributes() ) );
 
             $numberOfAffectedRows = $this->connection->insert( $this->tableName, $row->getAttributes() );
 
