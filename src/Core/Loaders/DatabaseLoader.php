@@ -24,6 +24,26 @@ class DatabaseLoader extends Loader
     }
 
     /**
+     * Normalize row attributes so arrays/objects become JSON strings (avoids "Array" in DB).
+     *
+     * @param array<string, mixed> $attributes
+     * @return array<string, string|int|float|bool|null>
+     */
+    private function normalizeRowAttributes ( array $attributes ) : array
+    {
+        $normalized = [];
+        foreach ( $attributes as $key => $value ) {
+            if ( $value === null || is_scalar( $value ) ) {
+                $normalized[$key] = $value;
+            } else {
+                $encoded = json_encode( $value, JSON_UNESCAPED_UNICODE );
+                $normalized[$key] = ( $encoded !== false ) ? $encoded : 'null';
+            }
+        }
+        return $normalized;
+    }
+
+    /**
      * @param Row $row
      * @throws SourceWatcherException
      */
@@ -44,9 +64,11 @@ class DatabaseLoader extends Loader
             throw new SourceWatcherException( "No database connector found. Set a connector before trying to insert a row" );
         }
 
+        $normalized = new Row( $this->normalizeRowAttributes( $row->getAttributes() ) );
+
         foreach ( $output as $currentConnector ) {
             if ( $currentConnector != null ) {
-                $currentConnector->insert( $row );
+                $currentConnector->insert( $normalized );
             }
         }
     }

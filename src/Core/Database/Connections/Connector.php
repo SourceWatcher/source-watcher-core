@@ -134,6 +134,28 @@ abstract class Connector
         $connection->executeStatement( $sql );
     }
 
+    /**
+     * Convert array/object values to JSON strings so they can be stored in TEXT columns.
+     * Only scalar and null are passed through; everything else is JSON-encoded so
+     * Doctrine/PDO never receive arrays (which would become the literal "Array").
+     *
+     * @param array<string, mixed> $attributes
+     * @return array<string, string|int|float|bool|null>
+     */
+    protected function normalizeRowAttributesForInsert ( array $attributes ) : array
+    {
+        $normalized = [];
+        foreach ( $attributes as $key => $value ) {
+            if ( $value === null || is_scalar( $value ) ) {
+                $normalized[$key] = $value;
+            } else {
+                $encoded = json_encode( $value, JSON_UNESCAPED_UNICODE );
+                $normalized[$key] = ( $encoded !== false ) ? $encoded : 'null';
+            }
+        }
+        return $normalized;
+    }
+
     /** @throws SourceWatcherException */
     public function insert ( Row $row ) : int
     {
@@ -147,9 +169,16 @@ abstract class Connector
 
             $this->executeExtraStatements( $this->connection );
 
-            $this->ensureTableExists( $this->connection, array_keys( $row->getAttributes() ) );
-
-            $numberOfAffectedRows = $this->connection->insert( $this->tableName, $row->getAttributes() );
+            $attributes = $this->normalizeRowAttributesForInsert( $row->getAttributes() );
+            $this->ensureTableExists( $this->connection, array_keys( $attributes ) );
+            foreach ( $attributes as $k => $v ) {
+                if ( is_array( $v ) ) {
+                    $attributes[$k] = json_encode( $v, JSON_UNESCAPED_UNICODE ) ?: 'null';
+                } elseif ( is_object( $v ) ) {
+                    $attributes[$k] = json_encode( $v, JSON_UNESCAPED_UNICODE ) ?: 'null';
+                }
+            }
+            $numberOfAffectedRows = $this->connection->insert( $this->tableName, $attributes );
 
             if ( !$this->bulkInsert ) {
                 $this->connection->close();
