@@ -51,12 +51,27 @@ class JsonExtractor extends Extractor
 
         $this->result = [];
 
-        if ( !file_exists( $this->input->getInput() ) ) {
+        $location = $this->input->getInput();
+        if ( $location === null || $location === '' ) {
             throw new SourceWatcherException( sprintf( Internationalization::getInstance()->getText( JsonExtractor::class,
-                "File_Input_File_Not_Found" ), $this->input->getInput() ) );
+                "File_Input_File_Not_Found" ), (string) $location ) );
+        }
+        $location = (string) $location;
+        $location = str_replace( '\\/', '/', $location );
+
+        $isUrl = $this->isUrl( $location );
+        if ( !$isUrl && !file_exists( $location ) ) {
+            throw new SourceWatcherException( sprintf( Internationalization::getInstance()->getText( JsonExtractor::class,
+                "File_Input_File_Not_Found" ), $location ) );
         }
 
-        $data = json_decode( file_get_contents( $this->input->getInput() ), true );
+        $raw = @file_get_contents( $location );
+        if ( $raw === false ) {
+            throw new SourceWatcherException( $isUrl
+                ? 'Failed to fetch JSON from URL. Ensure allow_url_fopen is enabled.'
+                : sprintf( Internationalization::getInstance()->getText( JsonExtractor::class, "File_Input_File_Not_Found" ), $location ) );
+        }
+        $data = json_decode( $raw, true );
 
         if ( $this->columns ) {
             $jsonPath = new JSONPath( $data );
@@ -74,10 +89,35 @@ class JsonExtractor extends Extractor
         }
 
         foreach ( $data as $row ) {
-            array_push( $this->result, new Row( $row ) );
+            array_push( $this->result, new Row( $this->normalizeRowForOutput( $row ) ) );
         }
 
         return $this->result;
+    }
+
+    /**
+     * Ensure row values are scalar or null so they never become "Array" when stored (e.g. in DB).
+     *
+     * @param array<string, mixed> $row
+     * @return array<string, string|int|float|bool|null>
+     */
+    private function normalizeRowForOutput ( array $row ) : array
+    {
+        $out = [];
+        foreach ( $row as $key => $value ) {
+            if ( $value === null || is_scalar( $value ) ) {
+                $out[$key] = $value;
+            } else {
+                $encoded = json_encode( $value, JSON_UNESCAPED_UNICODE );
+                $out[$key] = ( $encoded !== false ) ? $encoded : 'null';
+            }
+        }
+        return $out;
+    }
+
+    private function isUrl ( string $location ) : bool
+    {
+        return str_starts_with( $location, 'http://' ) || str_starts_with( $location, 'https://' );
     }
 
     private function transpose ( $columns ) : array
