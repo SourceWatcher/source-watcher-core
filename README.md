@@ -6,7 +6,7 @@
 
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-blue.svg?style=flat-square)](#contributors)
 
-**Source Watcher Core** is the ETL engine of the [Source Watcher](https://github.com/TheCocoTeam/source-watcher) project. It can be used as a standalone library or as a dependency of [Source Watcher API](../source-watcher-api) for server-side pipelines.
+**Source Watcher Core** is the ETL engine of the [Source Watcher Core](https://github.com/TheCocoTeam/source-watcher-core) project. It can be used as a standalone library or as a dependency of [Source Watcher API](https://github.com/TheCocoTeam/source-watcher-api) for server-side pipelines.
 
 This is a PHP project that allows extracting, transforming, and loading data from and to different sources including databases, files, and services, while at the same time facilitating the transformation of the data in multiple ways.
 
