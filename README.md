@@ -4,7 +4,7 @@
 
 [![scrutinizer-ci](https://scrutinizer-ci.com/g/TheCocoTeam/source-watcher-core/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/TheCocoTeam/source-watcher-core/?branch=master)
 
-**Source Watcher Core** is the ETL engine of the [Source Watcher Core](https://github.com/TheCocoTeam/source-watcher-core) project. It can be used as a standalone library or as a dependency of [Source Watcher API](https://github.com/TheCocoTeam/source-watcher-api) for server-side pipelines.
+**Source Watcher Core** is the ETL engine of the [Source Watcher](https://github.com/SourceWatcher/source-watcher-core) project. It can be used as a standalone library or as a dependency of [Source Watcher API](https://github.com/SourceWatcher/source-watcher-api) for server-side pipelines.
 
 This is a PHP project that allows extracting, transforming, and loading data from and to different sources including databases, files, and services, while at the same time facilitating the transformation of the data in multiple ways.
 
@@ -71,8 +71,8 @@ Finally, you want to save the information in your database table.
 use Coco\SourceWatcher\Core\Database\Connections\MySqlConnector;
 use Coco\SourceWatcher\Core\IO\Inputs\FileInput;
 use Coco\SourceWatcher\Core\IO\Outputs\DatabaseOutput;
-use Coco\SourceWatcher\Core\SourceWatcher;
-use Coco\SourceWatcher\Core\SourceWatcherException;
+use Coco\SourceWatcher\Core\Pipeline\SourceWatcher;
+use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
 
 $mysqlConnector = new MySqlConnector();
 $mysqlConnector->setUser( "user" );
@@ -95,7 +95,7 @@ try {
 }
 ```
 
-A runnable version (requires `.env` with `UNIT_TEST_MYSQL_*` and a MySQL `people` table) is [samples/CsvRenameColumnsToMysql.php](samples/CsvRenameColumnsToMysql.php). More samples are listed in [samples/README.md](samples/README.md).
+A runnable version (requires `.env` with `UNIT_TEST_MYSQL_*` and a MySQL `people` table) is [samples/CsvRenameColumnsToMysql.php](samples/CsvRenameColumnsToMysql.php). More samples are listed in [samples/README.md](samples/README.md). Without local PHP, run the sample via the dev image as shown in the [quickstart README](https://github.com/SourceWatcher/source-watcher-quickstart).
 
 ## Feedback
 
