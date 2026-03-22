@@ -4,8 +4,6 @@
 
 [![scrutinizer-ci](https://scrutinizer-ci.com/g/TheCocoTeam/source-watcher-core/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/TheCocoTeam/source-watcher-core/?branch=master)
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-blue.svg?style=flat-square)](#contributors)
-
 **Source Watcher Core** is the ETL engine of the [Source Watcher Core](https://github.com/TheCocoTeam/source-watcher-core) project. It can be used as a standalone library or as a dependency of [Source Watcher API](https://github.com/TheCocoTeam/source-watcher-api) for server-side pipelines.
 
 This is a PHP project that allows extracting, transforming, and loading data from and to different sources including databases, files, and services, while at the same time facilitating the transformation of the data in multiple ways.
@@ -90,19 +88,3 @@ A runnable version (requires `.env` with `UNIT_TEST_MYSQL_*` and a MySQL `people
 ## Feedback
 
 Please submit issues, and send your feedback and suggestions as often as you have them.
-
-## Contributors
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tr>
-    <td align="center"><a href="http://bit.ly/jprv-linkedin"><img src="https://avatars0.githubusercontent.com/u/4614970?v=4" width="100px;" alt=""/><br /><sub><b>Jean Paul Ruiz</b></sub></a><br /><a href="https://github.com/TheCocoTeam/source-watcher-core/commits?author=jpruiz114" title="Code">💻</a></td>
-  </tr>
-</table>
-<!-- markdownlint-enable -->
-<!-- prettier-ignore-end -->
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
