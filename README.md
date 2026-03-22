@@ -13,6 +13,18 @@ This is a PHP project that allows extracting, transforming, and loading data fro
 - PHP 8.4 or later (see `composer.json` for extension requirements: curl, dom, json, pgsql, etc.)
 - [Composer](https://getcomposer.org/)
 
+## Optional system dependencies
+
+Some extractors require external tools to be installed on the system (or in the Docker container). These are not PHP packages and are not managed by Composer.
+
+| Extractor | Tool | Purpose | Install |
+|---|---|---|---|
+| `TesseractOcrExtractor` | [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) | Extract text from images (PNG, JPEG, TIFF, etc.) | `apt-get install tesseract-ocr tesseract-ocr-eng` (Debian/Ubuntu) or `apk add tesseract-ocr tesseract-ocr-data-eng` (Alpine) |
+
+Tesseract is an open-source OCR engine originally developed at HP and maintained by Google until 2017, now an independent project. It supports over 100 languages and is licensed under the [Apache License 2.0](https://github.com/tesseract-ocr/tesseract/blob/main/LICENSE). Language data packages (e.g. `tesseract-ocr-data-fra` for French) can be installed independently - see the [Tesseract documentation](https://github.com/tesseract-ocr/tesseract) for the full list.
+
+The API's `Dockerfile` and `Dockerfile.dev` already include the installation steps for `tesseract-ocr` and the English language data.
+
 ## Installation
 
 ```bash
