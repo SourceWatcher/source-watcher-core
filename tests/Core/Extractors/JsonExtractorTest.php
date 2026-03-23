@@ -154,30 +154,34 @@ class JsonExtractorTest extends TestCase
      *
      * @throws SourceWatcherException
      */
-    public function testLocalPathUnreadableThrows () : void
+    public function testNestedArrayValuesAreJsonEncodedNotArrayString () : void
     {
-        $path = sys_get_temp_dir() . '/json-extractor-unreadable-' . uniqid( '', true ) . '.json';
-        touch( $path );
-        chmod( $path, 0000 );
-        $couldNotRead = @file_get_contents( $path ) === false;
-        @chmod( $path, 0600 );
-        @unlink( $path );
-        if ( !$couldNotRead ) {
-            $this->markTestSkipped( 'Cannot make file unreadable (e.g. running as root)' );
-            return;
-        }
-        touch( $path );
-        chmod( $path, 0000 );
-        $this->expectException( SourceWatcherException::class );
-        try {
-            $jsonExtractor = new JsonExtractor();
-            $jsonExtractor->setInput( new FileInput( $path ) );
-            $jsonExtractor->extract();
-        } finally {
-            @chmod( $path, 0600 );
-            @unlink( $path );
-        }
+        $jsonExtractor = new JsonExtractor();
+        $jsonExtractor->setInput( new FileInput( __DIR__ . "/../../../samples/data/json/books.json" ) );
+
+        $result = $jsonExtractor->extract();
+
+        $this->assertNotEmpty( $result );
+        $firstRow = $result[0];
+
+        // "authors" is a nested array in books.json — it must be stored as a JSON string, not "Array"
+        $authors = $firstRow['authors'];
+        $this->assertIsString( $authors, 'Nested array must be serialized to a string.' );
+        $this->assertNotSame( 'Array', $authors, 'Nested array must not become the literal string "Array".' );
+        $this->assertJson( $authors, 'Nested array must be valid JSON.' );
     }
+
+    public function testLocalPathNotFoundThrows () : void
+    {
+        $path = sys_get_temp_dir() . '/json-extractor-missing-' . uniqid( '', true ) . '.json';
+
+        $this->expectException( SourceWatcherException::class );
+
+        $jsonExtractor = new JsonExtractor();
+        $jsonExtractor->setInput( new FileInput( $path ) );
+        $jsonExtractor->extract();
+    }
+
 
     /**
      * URL that cannot be fetched: file_get_contents returns false, so extract throws
