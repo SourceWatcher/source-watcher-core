@@ -20,10 +20,13 @@ Some extractors require external tools to be installed on the system (or in the 
 | Extractor | Tool | Purpose | Install |
 |---|---|---|---|
 | `TesseractOcrExtractor` | [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) | Extract text from images (PNG, JPEG, TIFF, etc.) | `apt-get install tesseract-ocr tesseract-ocr-eng` (Debian/Ubuntu) or `apk add tesseract-ocr tesseract-ocr-data-eng` (Alpine) |
+| `PdfExtractor` | [poppler-utils](https://poppler.freedesktop.org/) + [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) | Extract text from any PDF (digital, scanned, or mixed) | `apt-get install poppler-utils tesseract-ocr tesseract-ocr-eng` (Debian/Ubuntu) or `apk add poppler-utils tesseract-ocr tesseract-ocr-data-eng` (Alpine) |
 
 Tesseract is an open-source OCR engine originally developed at HP and maintained by Google until 2017, now an independent project. It supports over 100 languages and is licensed under the [Apache License 2.0](https://github.com/tesseract-ocr/tesseract/blob/main/LICENSE). Language data packages (e.g. `tesseract-ocr-data-fra` for French) can be installed independently - see the [Tesseract documentation](https://github.com/tesseract-ocr/tesseract) for the full list.
 
-The API's `Dockerfile` and `Dockerfile.dev` already include the installation steps for `tesseract-ocr` and the English language data.
+`PdfExtractor` uses `pdftotext` for pages with an embedded text layer and automatically falls back to `pdftoppm` + Tesseract for image-only (scanned) pages. Mixed PDFs are handled page by page — no user configuration required.
+
+The API's `Dockerfile` and `Dockerfile.dev` already include the installation steps for `tesseract-ocr`, `poppler-utils`, and the English language data.
 
 ## Installation
 
