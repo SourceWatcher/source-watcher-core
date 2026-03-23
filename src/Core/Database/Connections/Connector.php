@@ -8,7 +8,6 @@ use Coco\SourceWatcher\Utils\FileUtils;
 use Coco\SourceWatcher\Utils\Internationalization;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Exception;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -121,10 +120,6 @@ abstract class Connector
         }
 
         $platform = $connection->getDatabasePlatform();
-        if ( !$platform instanceof AbstractPlatform ) {
-            return;
-        }
-
         $quotedTable = $platform->quoteSingleIdentifier( $this->tableName );
         $defs = [];
         foreach ( $columnNames as $name ) {
@@ -171,13 +166,6 @@ abstract class Connector
 
             $attributes = $this->normalizeRowAttributesForInsert( $row->getAttributes() );
             $this->ensureTableExists( $this->connection, array_keys( $attributes ) );
-            foreach ( $attributes as $k => $v ) {
-                if ( is_array( $v ) ) {
-                    $attributes[$k] = json_encode( $v, JSON_UNESCAPED_UNICODE ) ?: 'null';
-                } elseif ( is_object( $v ) ) {
-                    $attributes[$k] = json_encode( $v, JSON_UNESCAPED_UNICODE ) ?: 'null';
-                }
-            }
             $numberOfAffectedRows = $this->connection->insert( $this->tableName, $attributes );
 
             if ( !$this->bulkInsert ) {

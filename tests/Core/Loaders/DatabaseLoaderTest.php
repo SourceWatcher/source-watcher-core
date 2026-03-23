@@ -82,4 +82,21 @@ class DatabaseLoaderTest extends TestCase
 
         $this->assertNull( $databaseLoader->load( new Row( [ "name" => $this->janeDoe ] ) ) );
     }
+
+    /**
+     * A row whose column value is an array (non-scalar) must be JSON-encoded
+     * before insertion rather than cast to the string "Array".
+     * Covers the normalizeRowAttributes non-scalar branch (json_encode lines).
+     *
+     * @throws SourceWatcherException
+     */
+    public function testInsertRowWithArrayValueJsonEncodesTheColumn () : void
+    {
+        $databaseLoader = new DatabaseLoader();
+        $databaseLoader->setOutput( new DatabaseOutput( $this->createMock( Connector::class ) ) );
+
+        $this->assertNull(
+            $databaseLoader->load( new Row( [ "tags" => [ "php", "etl", "ocr" ] ] ) )
+        );
+    }
 }

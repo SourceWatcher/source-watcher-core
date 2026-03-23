@@ -88,7 +88,7 @@ class PdfExtractorTest extends TestCase
             $this->markTestSkipped( 'poppler-utils is not installed on this system.' );
         }
 
-        $tmpFile = $this->createTextPdf( 'Source Watch' );
+        $tmpFile = $this->createTextPdf( 'Source Watcher ETL pipeline extracts text' );
         try {
             $extractor = new PdfExtractor();
             $extractor->setInput( new FileInput( $tmpFile ) );
@@ -117,7 +117,7 @@ class PdfExtractorTest extends TestCase
             $this->markTestSkipped( 'poppler-utils is not installed on this system.' );
         }
 
-        $tmpFile = $this->createTextPdf( 'Hello World' );
+        $tmpFile = $this->createTextPdf( 'Hello Source Watcher integration test running' );
         try {
             $extractor = new PdfExtractor();
             $extractor->setInput( new FileInput( $tmpFile ) );
@@ -137,6 +137,61 @@ class PdfExtractorTest extends TestCase
     }
 
     /**
+     * Passing a non-PDF file causes pdfinfo to return no page count,
+     * which must be translated into a SourceWatcherException.
+     * Covers the getPageCount() return-0 path and the throw in extract().
+     */
+    public function testExtractThrowsWhenFileIsNotValidPdf () : void
+    {
+        if ( shell_exec( 'which pdfinfo 2>/dev/null' ) === null ) {
+            $this->markTestSkipped( 'poppler-utils is not installed on this system.' );
+        }
+
+        $tmpFile = tempnam( sys_get_temp_dir(), 'not_a_pdf_' ) . '.bin';
+        file_put_contents( $tmpFile, 'this is not a PDF file' );
+
+        try {
+            $extractor = new PdfExtractor();
+            $extractor->setInput( new FileInput( $tmpFile ) );
+
+            $this->expectException( SourceWatcherException::class );
+            $this->expectExceptionMessageMatches( '/Could not read PDF/' );
+            $extractor->extract();
+        } finally {
+            @unlink( $tmpFile );
+        }
+    }
+
+    /**
+     * A blank-page PDF has no text layer, so pdftotext returns empty output.
+     * This forces tryTextLayer() to return null and exercises the full OCR fallback
+     * path (extractViaOcr via pdftoppm + tesseract), even though the result is empty.
+     * Covers lines: tryTextLayer return null, extractPage OCR branch, extractViaOcr.
+     */
+    public function testExtractFallsBackToOcrForBlankPage () : void
+    {
+        if ( shell_exec( 'which pdfinfo 2>/dev/null' ) === null ) {
+            $this->markTestSkipped( 'poppler-utils is not installed on this system.' );
+        }
+
+        if ( shell_exec( 'which tesseract 2>/dev/null' ) === null ) {
+            $this->markTestSkipped( 'tesseract is not installed on this system.' );
+        }
+
+        $tmpFile = $this->createBlankPagePdf();
+        try {
+            $extractor = new PdfExtractor();
+            $extractor->setInput( new FileInput( $tmpFile ) );
+
+            $result = $extractor->extract();
+
+            $this->assertIsArray( $result, 'extract() must return an array even for a blank page.' );
+        } finally {
+            @unlink( $tmpFile );
+        }
+    }
+
+    /**
      * Verifies that custom column and pageColumn names are honoured.
      */
     public function testCustomColumnNamesAreUsed () : void
@@ -145,7 +200,7 @@ class PdfExtractorTest extends TestCase
             $this->markTestSkipped( 'poppler-utils is not installed on this system.' );
         }
 
-        $tmpFile = $this->createTextPdf( 'Custom columns' );
+        $tmpFile = $this->createTextPdf( 'Custom column names configured for pipeline test' );
         try {
             $extractor = new PdfExtractor();
             $extractor->setInput( new FileInput( $tmpFile ) );
@@ -165,6 +220,56 @@ class PdfExtractorTest extends TestCase
         } finally {
             @unlink( $tmpFile );
         }
+    }
+
+    /**
+     * cleanupDir() returns early when passed a path that is not a directory.
+     * This defensive guard is unreachable through the public extract() API,
+     * so it is tested directly via ReflectionClass.
+     * Covers: the `return;` branch inside cleanupDir.
+     */
+    public function testCleanupDirIsNoopForNonExistentPath () : void
+    {
+        $extractor = new PdfExtractor();
+
+        $reflection = new \ReflectionClass( $extractor );
+        $method = $reflection->getMethod( 'cleanupDir' );
+
+        $fakePath = sys_get_temp_dir() . '/sw_pdf_no_such_dir_' . uniqid( '', true );
+        $this->assertDirectoryDoesNotExist( $fakePath );
+
+        $method->invoke( $extractor, $fakePath );
+
+        $this->addToAssertionCount( 1 );
+    }
+
+    /**
+     * Builds a minimal valid single-page PDF with NO content stream (blank page).
+     * pdftotext returns empty output for it, triggering the OCR fallback path.
+     * Offsets are computed dynamically so the xref table is always correct.
+     */
+    private function createBlankPagePdf () : string
+    {
+        $obj1 = "1 0 obj\n<</Type/Catalog/Pages 2 0 R>>\nendobj\n";
+        $obj2 = "2 0 obj\n<</Type/Pages/Kids[3 0 R]/Count 1>>\nendobj\n";
+        $obj3 = "3 0 obj\n<</Type/Page/Parent 2 0 R/MediaBox[0 0 612 792]>>\nendobj\n";
+
+        $header = "%PDF-1.4\n";
+        $off1 = strlen( $header );
+        $off2 = $off1 + strlen( $obj1 );
+        $off3 = $off2 + strlen( $obj2 );
+        $xrefOffset = $off3 + strlen( $obj3 );
+
+        $xref  = "xref\n0 4\n";
+        $xref .= "0000000000 65535 f \n";
+        $xref .= sprintf( "%010d 00000 n \n", $off1 );
+        $xref .= sprintf( "%010d 00000 n \n", $off2 );
+        $xref .= sprintf( "%010d 00000 n \n", $off3 );
+        $xref .= "trailer\n<</Size 4/Root 1 0 R>>\nstartxref\n{$xrefOffset}\n%%EOF\n";
+
+        $tmpFile = tempnam( sys_get_temp_dir(), 'pdf_blank_' ) . '.pdf';
+        file_put_contents( $tmpFile, $header . $obj1 . $obj2 . $obj3 . $xref );
+        return $tmpFile;
     }
 
     /**
