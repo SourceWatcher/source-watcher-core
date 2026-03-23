@@ -96,6 +96,32 @@ class TesseractOcrExtractorTest extends TestCase
 
     /**
      * Integration test: skipped when tesseract is not installed.
+     * Passing a non-image file causes Tesseract to exit with a non-zero code,
+     * which must be translated into a SourceWatcherException.
+     */
+    public function testExtractThrowsWhenTesseractCannotProcessFile () : void
+    {
+        if ( shell_exec( 'which tesseract 2>/dev/null' ) === null ) {
+            $this->markTestSkipped( 'tesseract is not installed on this system.' );
+        }
+
+        $tmpFile = tempnam( sys_get_temp_dir(), 'ocr_bad_' ) . '.bin';
+        file_put_contents( $tmpFile, 'not an image file' );
+
+        try {
+            $extractor = new TesseractOcrExtractor();
+            $extractor->setInput( new FileInput( $tmpFile ) );
+
+            $this->expectException( SourceWatcherException::class );
+            $this->expectExceptionMessageMatches( '/Tesseract failed \(exit code \d+\)/' );
+            $extractor->extract();
+        } finally {
+            @unlink( $tmpFile );
+        }
+    }
+
+    /**
+     * Integration test: skipped when tesseract is not installed.
      * Verifies that empty lines produced by Tesseract are filtered out.
      *
      * @requires extension gd

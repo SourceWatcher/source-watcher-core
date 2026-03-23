@@ -150,7 +150,6 @@ class PdfExtractor extends Extractor
             if ( $returnCode === 0 ) {
                 $lines = array_merge( $lines, $ocrOutput );
             }
-            @unlink( $image );
         }
 
         return $lines;

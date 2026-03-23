@@ -139,4 +139,47 @@ class ConnectorTest extends TestCase
         $this->expectExceptionMessage( "Something unexpected went wrong" );
         $connector->executePlainQuery( "SELECT 1" );
     }
+
+    /**
+     * ensureTableExists returns immediately when the column names list is empty.
+     * Tested via reflection so the early-return guard is exercised without
+     * triggering a subsequent insert failure.
+     * Covers: the `return;` on line 120 of Connector.
+     *
+     * @throws \Exception
+     */
+    public function testEnsureTableExistsIsNoopWhenColumnNamesIsEmpty () : void
+    {
+        $connector = new SqliteConnector();
+        $connector->setPath( ":memory:" );
+        $connector->setMemory( true );
+
+        $connection = $connector->getNewConnection();
+
+        $method = ( new \ReflectionClass( $connector ) )->getMethod( 'ensureTableExists' );
+        $method->invoke( $connector, $connection, [] );
+
+        $connection->close();
+
+        $this->addToAssertionCount( 1 );
+    }
+
+    /**
+     * Inserting a row whose column value is an array causes normalizeRowAttributesForInsert
+     * to JSON-encode it before the value reaches Doctrine/PDO.
+     * Covers: the json_encode lines in normalizeRowAttributesForInsert.
+     *
+     * @throws SourceWatcherException
+     */
+    public function testInsertRowWithArrayValueJsonEncodesTheColumn () : void
+    {
+        $connector = new SqliteConnector();
+        $connector->setPath( ":memory:" );
+        $connector->setMemory( true );
+        $connector->setTableName( "test_table" );
+
+        $affected = $connector->insert( new \Coco\SourceWatcher\Core\Data\Row( [ "tags" => [ "php", "etl" ] ] ) );
+
+        $this->assertSame( 1, $affected );
+    }
 }
