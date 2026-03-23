@@ -67,7 +67,7 @@ class ApiExtractor extends Extractor
             throw new SourceWatcherException( "No resource URL provided." );
         }
 
-        $reader = new ApiReader();
+        $reader = $this->createReader();
         $reader->setResourceURL( $url );
         $reader->setTimeout( $this->input->getTimeout() );
         if ( !empty( $this->input->getHeaders() ) ) {
@@ -114,6 +114,11 @@ class ApiExtractor extends Extractor
      * @return array|mixed Parsed data: array of rows for XML; decoded structure for JSON
      * @throws SourceWatcherException
      */
+    protected function createReader () : ApiReader
+    {
+        return new ApiReader();
+    }
+
     private function parseResponse ( string $response ) : mixed
     {
         $type = strtolower( $this->responseType );
