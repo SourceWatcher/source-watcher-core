@@ -179,9 +179,6 @@ class PostgreSqlConnectorTest extends ParentTest
         $connection = $this->createMock( Connection::class );
 
         $method = new ReflectionMethod( PostgreSqlConnector::class, "executeExtraStatements" );
-        if ( PHP_VERSION_ID < 80100 ) {
-            $method->setAccessible( true );
-        }
         $method->invoke( $connector, $connection );
 
         $this->addToAssertionCount( 1 );

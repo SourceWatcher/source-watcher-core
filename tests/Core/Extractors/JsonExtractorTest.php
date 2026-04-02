@@ -8,6 +8,7 @@ use Coco\SourceWatcher\Core\IO\Inputs\Input;
 use Coco\SourceWatcher\Core\Data\Row;
 use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
 use PHPUnit\Framework\TestCase;
+use ReflectionMethod;
 
 /**
  * Class JsonExtractorTest
@@ -197,5 +198,132 @@ class JsonExtractorTest extends TestCase
         $jsonExtractor = new JsonExtractor();
         $jsonExtractor->setInput( new FileInput( 'https://localhost:65535/no-such.json' ) );
         $jsonExtractor->extract();
+    }
+
+    /**
+     * Covers isUrl() http:// branch (distinct from https).
+     *
+     * @throws SourceWatcherException
+     */
+    public function testHttpUrlFetchFailsThrows () : void
+    {
+        $this->expectException( SourceWatcherException::class );
+        $this->expectExceptionMessage( 'Failed to fetch JSON from URL' );
+
+        $jsonExtractor = new JsonExtractor();
+        $jsonExtractor->setInput( new FileInput( 'http://localhost:65535/no-such.json' ) );
+        $jsonExtractor->extract();
+    }
+
+    /**
+     * Location normalizes JSON-style escaped slashes before URL fetch (str_replace \/ → /).
+     *
+     * @throws SourceWatcherException
+     */
+    public function testUrlWithEscapedSlashesNormalizesAndFailsFetch () : void
+    {
+        $this->expectException( SourceWatcherException::class );
+        $this->expectExceptionMessage( 'Failed to fetch JSON from URL' );
+
+        $jsonExtractor = new JsonExtractor();
+        $jsonExtractor->setInput( new FileInput( 'https:\/\/localhost:65535/no-such.json' ) );
+        $jsonExtractor->extract();
+    }
+
+    /**
+     * Malformed JSON must throw SourceWatcherException (not TypeError from foreach on null).
+     *
+     * @throws SourceWatcherException
+     */
+    public function testInvalidJsonBodyThrows () : void
+    {
+        $path = sys_get_temp_dir() . '/json-extractor-bad-' . uniqid( '', true ) . '.json';
+        file_put_contents( $path, 'not valid json {{{' );
+
+        try {
+            $this->expectException( SourceWatcherException::class );
+            $this->expectExceptionMessage( 'Invalid JSON' );
+
+            $jsonExtractor = new JsonExtractor();
+            $jsonExtractor->setInput( new FileInput( $path ) );
+            $jsonExtractor->extract();
+        } finally {
+            @unlink( $path );
+        }
+    }
+
+    /**
+     * Valid JSON whose root is not an object/array (e.g. literal null) must throw, not foreach on null.
+     *
+     * @throws SourceWatcherException
+     */
+    public function testJsonLiteralNullRootThrows () : void
+    {
+        $path = sys_get_temp_dir() . '/json-extractor-null-root-' . uniqid( '', true ) . '.json';
+        file_put_contents( $path, 'null' );
+
+        try {
+            $this->expectException( SourceWatcherException::class );
+            $this->expectExceptionMessage( 'JSON root must be an array or object' );
+
+            $jsonExtractor = new JsonExtractor();
+            $jsonExtractor->setInput( new FileInput( $path ) );
+            $jsonExtractor->extract();
+        } finally {
+            @unlink( $path );
+        }
+    }
+
+    /**
+     * Valid JSON scalar number at root: json_last_error clean but root is not array/object.
+     *
+     * @throws SourceWatcherException
+     */
+    public function testJsonScalarNumberRootThrows () : void
+    {
+        $path = sys_get_temp_dir() . '/json-extractor-num-root-' . uniqid( '', true ) . '.json';
+        file_put_contents( $path, '42' );
+
+        try {
+            $this->expectException( SourceWatcherException::class );
+            $this->expectExceptionMessage( 'JSON root must be an array or object' );
+
+            $jsonExtractor = new JsonExtractor();
+            $jsonExtractor->setInput( new FileInput( $path ) );
+            $jsonExtractor->extract();
+        } finally {
+            @unlink( $path );
+        }
+    }
+
+    public function testEmptyJsonArrayExtractsToZeroRows () : void
+    {
+        $path = sys_get_temp_dir() . '/json-extractor-empty-arr-' . uniqid( '', true ) . '.json';
+        file_put_contents( $path, '[]' );
+
+        try {
+            $jsonExtractor = new JsonExtractor();
+            $jsonExtractor->setInput( new FileInput( $path ) );
+            $this->assertSame( [], $jsonExtractor->extract() );
+        } finally {
+            @unlink( $path );
+        }
+    }
+
+    /**
+     * normalizeRowForOutput: when json_encode fails on a nested value, falls back to string 'null'.
+     */
+    public function testNormalizeRowForOutputUsesNullWhenJsonEncodeFails () : void
+    {
+        $jsonExtractor = new JsonExtractor();
+        $method = new ReflectionMethod( JsonExtractor::class, 'normalizeRowForOutput' );
+
+        $handle = tmpfile();
+        $this->assertNotFalse( $handle );
+        $this->assertIsResource( $handle );
+        $out = $method->invoke( $jsonExtractor, [ 'nested' => $handle ] );
+        fclose( $handle );
+
+        $this->assertSame( 'null', $out['nested'] );
     }
 }
