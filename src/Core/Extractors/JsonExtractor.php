@@ -73,6 +73,18 @@ class JsonExtractor extends Extractor
         }
         $data = json_decode( $raw, true );
 
+        if ( json_last_error() !== JSON_ERROR_NONE ) {
+            throw new SourceWatcherException(
+                sprintf( 'Invalid JSON in %s: %s', $location, json_last_error_msg() )
+            );
+        }
+
+        if ( !is_array( $data ) ) {
+            throw new SourceWatcherException(
+                sprintf( 'JSON root must be an array or object in %s', $location )
+            );
+        }
+
         if ( $this->columns ) {
             $jsonPath = new JSONPath( $data );
 

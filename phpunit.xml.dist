@@ -1,15 +1,19 @@
-<?xml version="1.0"?>
-<phpunit>
-    <filter>
-        <whitelist addUncoveredFilesFromWhitelist="true">
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.6/phpunit.xsd"
+>
+    <coverage includeUncoveredFiles="true">
+        <include>
             <directory suffix=".php">./src</directory>
-        </whitelist>
-    </filter>
+        </include>
+        <report>
+            <clover outputFile="./phpunit-report/coverage-report.xml"/>
+            <html outputDirectory="./phpunit-report/coverage-html"/>
+        </report>
+    </coverage>
 
     <logging>
-        <log type="coverage-clover" target="./phpunit-report/coverage-report.xml"/>
-        <log type="coverage-html" target="./phpunit-report/coverage-html"/>
-        <log type="junit" target="./phpunit-report/tests-report.xml"/>
+        <junit outputFile="./phpunit-report/tests-report.xml"/>
     </logging>
 
     <testsuites>
