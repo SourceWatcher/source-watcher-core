@@ -13,7 +13,7 @@ jobs:
       - php/install-packages
       - run:
           name: run tests
-          command: ./vendor/bin/phpunit
+          command: composer run test:ci
 workflows:
   build-and-test:
     jobs:
