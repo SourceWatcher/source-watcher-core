@@ -36,9 +36,11 @@
     },
     "require-dev": {
         "phpspec/prophecy": "^1.16",
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^12.5"
     },
     "scripts": {
+        "test": "phpunit",
+        "test:ci": "phpunit --no-coverage",
         "post-install-cmd": ["@php scripts/patch-jsonpath-deprecations.php"],
         "post-update-cmd": ["@php scripts/patch-jsonpath-deprecations.php"]
     }

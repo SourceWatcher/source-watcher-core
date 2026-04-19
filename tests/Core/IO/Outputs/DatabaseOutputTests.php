@@ -4,6 +4,7 @@ namespace Coco\SourceWatcher\Tests\Core\IO\Outputs;
 
 use Coco\SourceWatcher\Core\Database\Connections\Connector;
 use Coco\SourceWatcher\Core\IO\Outputs\DatabaseOutput;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -11,6 +12,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @package Coco\SourceWatcher\Tests\Core\IO\Outputs
  */
+#[AllowMockObjectsWithoutExpectations]
 class DatabaseOutputTests extends TestCase
 {
     public function testSetGetOutput () : void

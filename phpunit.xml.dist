@@ -1,30 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.6/phpunit.xsd"
->
-    <coverage includeUncoveredFiles="true">
-        <include>
-            <directory suffix=".php">./src</directory>
-        </include>
-        <report>
-            <clover outputFile="./phpunit-report/coverage-report.xml"/>
-            <html outputDirectory="./phpunit-report/coverage-html"/>
-        </report>
-    </coverage>
-
-    <logging>
-        <junit outputFile="./phpunit-report/tests-report.xml"/>
-    </logging>
-
-    <testsuites>
-        <testsuite name="Test Suite">
-            <directory suffix=".php">./tests</directory>
-        </testsuite>
-    </testsuites>
-
-    <groups>
-        <exclude>
-            <group>integration</group>
-        </exclude>
-    </groups>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.5/phpunit.xsd">
+  <coverage includeUncoveredFiles="true">
+    <report>
+      <clover outputFile="./phpunit-report/coverage-report.xml"/>
+      <html outputDirectory="./phpunit-report/coverage-html"/>
+    </report>
+  </coverage>
+  <logging>
+    <junit outputFile="./phpunit-report/tests-report.xml"/>
+  </logging>
+  <testsuites>
+    <testsuite name="Test Suite">
+      <directory suffix=".php">./tests</directory>
+    </testsuite>
+  </testsuites>
+  <groups>
+    <exclude>
+      <group>integration</group>
+    </exclude>
+  </groups>
+  <source>
+    <include>
+      <directory suffix=".php">./src</directory>
+    </include>
+  </source>
 </phpunit>

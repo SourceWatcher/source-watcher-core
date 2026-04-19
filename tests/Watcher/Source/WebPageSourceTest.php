@@ -4,6 +4,7 @@ namespace Coco\SourceWatcher\Tests\Watcher\Source;
 
 use Coco\SourceWatcher\Watcher\Handler\WebPageHandler;
 use Coco\SourceWatcher\Watcher\Source\WebPageSource;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -11,6 +12,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @package Coco\SourceWatcher\Tests\Watcher\Source
  */
+#[AllowMockObjectsWithoutExpectations]
 class WebPageSourceTest extends TestCase
 {
     public string $localhost_url;

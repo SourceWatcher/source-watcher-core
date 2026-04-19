@@ -10,6 +10,7 @@ use Coco\SourceWatcher\Core\Pipeline\Pipeline;
 use Coco\SourceWatcher\Core\Step\Loader;
 use Coco\SourceWatcher\Core\Step\Transformer;
 use Coco\SourceWatcher\Core\Transformers\RenameColumnsTransformer;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,6 +18,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @package Coco\SourceWatcher\Tests\Core
  */
+#[AllowMockObjectsWithoutExpectations]
 class PipelineTest extends TestCase
 {
     private Pipeline $pipeline;

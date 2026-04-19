@@ -8,6 +8,7 @@ use Coco\SourceWatcher\Core\IO\Outputs\Output;
 use Coco\SourceWatcher\Core\Loaders\DatabaseLoader;
 use Coco\SourceWatcher\Core\Data\Row;
 use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -15,6 +16,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @package Coco\SourceWatcher\Tests\Core\Loaders
  */
+#[AllowMockObjectsWithoutExpectations]
 class DatabaseLoaderTest extends TestCase
 {
     private string $janeDoe;

@@ -13,12 +13,15 @@ use Coco\SourceWatcher\Core\Pipeline\Pipeline;
 use Coco\SourceWatcher\Core\Pipeline\SourceWatcher;
 use Coco\SourceWatcher\Core\Pipeline\StepLoader;
 use Coco\SourceWatcher\Tests\Common\ParentTest;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Class SourceWatcherTest
  *
  * @package Coco\SourceWatcher\Tests\Core
  */
+#[AllowMockObjectsWithoutExpectations]
 class SourceWatcherTest extends ParentTest
 {
     private string $columnsIndex;
@@ -197,9 +200,9 @@ class SourceWatcherTest extends ParentTest
     /**
      * Acting as an integration test to verify how two extractors work together.
      *
-     * @group integration
      * @throws SourceWatcherException
      */
+    #[Group( 'integration' )]
     public function testMultipleExtractors () : void
     {
         $this->sourceWatcher

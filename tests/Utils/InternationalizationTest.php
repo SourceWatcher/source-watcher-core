@@ -28,7 +28,7 @@ class InternationalizationTest extends TestCase
 
     public function setUp () : void
     {
-        $nextFunctionToBeCalled = $this->getName();
+        $nextFunctionToBeCalled = $this->name();
 
         if ( file_exists( $this->envFileLocation ) ) {
             $this->preExistingEnvFile = true;

@@ -7,6 +7,7 @@ use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
 use Coco\SourceWatcher\Core\Extractors\TesseractOcrExtractor;
 use Coco\SourceWatcher\Core\IO\Inputs\DatabaseInput;
 use Coco\SourceWatcher\Core\IO\Inputs\FileInput;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 use PHPUnit\Framework\TestCase;
 
 class TesseractOcrExtractorTest extends TestCase
@@ -58,9 +59,8 @@ class TesseractOcrExtractorTest extends TestCase
      * Integration test: skipped automatically when tesseract is not installed.
      * Creates a minimal PNG with text via GD, runs the extractor, and checks
      * that at least one Row is returned with the expected column key.
-     *
-     * @requires extension gd
      */
+    #[RequiresPhpExtension( 'gd' )]
     public function testExtractReturnsRowsFromImage () : void
     {
         if ( shell_exec( 'which tesseract 2>/dev/null' ) === null ) {
@@ -123,9 +123,8 @@ class TesseractOcrExtractorTest extends TestCase
     /**
      * Integration test: skipped when tesseract is not installed.
      * Verifies that empty lines produced by Tesseract are filtered out.
-     *
-     * @requires extension gd
      */
+    #[RequiresPhpExtension( 'gd' )]
     public function testExtractFiltersEmptyLines () : void
     {
         if ( shell_exec( 'which tesseract 2>/dev/null' ) === null ) {
