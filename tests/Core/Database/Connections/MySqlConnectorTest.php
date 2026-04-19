@@ -9,6 +9,7 @@ use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
 use Coco\SourceWatcher\Tests\Common\ParentTest;
 use Coco\SourceWatcher\Utils\Internationalization;
 use Exception;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Class MySqlConnectorTest
@@ -137,8 +138,8 @@ class MySqlConnectorTest extends ParentTest
 
     /**
      * @throws SourceWatcherException
-     * @group integration
      */
+    #[Group( 'integration' )]
     public function testInsertUsingEnvironmentVariables () : void
     {
         $connector = new MySqlConnector();

@@ -8,8 +8,10 @@ use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
 use Coco\SourceWatcher\Core\Extractors\ApiExtractor;
 use Coco\SourceWatcher\Core\IO\Inputs\ApiInput;
 use Coco\SourceWatcher\Core\IO\Inputs\FileInput;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 class ApiExtractorTest extends TestCase
 {
     // --- helpers ---

@@ -7,6 +7,7 @@ use Coco\SourceWatcher\Core\IO\Inputs\FileInput;
 use Coco\SourceWatcher\Core\IO\Inputs\Input;
 use Coco\SourceWatcher\Core\Data\Row;
 use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 
@@ -15,6 +16,7 @@ use ReflectionMethod;
  *
  * @package Coco\SourceWatcher\Tests\Core\Extractors
  */
+#[AllowMockObjectsWithoutExpectations]
 class JsonExtractorTest extends TestCase
 {
     private string $colorIndex;

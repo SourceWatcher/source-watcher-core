@@ -9,6 +9,7 @@ use Coco\SourceWatcher\Core\IO\Inputs\DatabaseInput;
 use Coco\SourceWatcher\Core\IO\Inputs\FileInput;
 use Coco\SourceWatcher\Core\Exception\SourceWatcherException;
 use Coco\SourceWatcher\Tests\Common\ParentTest;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Class DatabaseExtractorTest
@@ -133,9 +134,9 @@ class DatabaseExtractorTest extends ParentTest
     }
 
     /**
-     * @group integration
      * @throws SourceWatcherException
      */
+    #[Group( 'integration' )]
     public function testExtractFromMySqlTable () : void
     {
         $query = "SELECT * FROM " . $this->tableName;

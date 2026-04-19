@@ -9,6 +9,8 @@ use Coco\SourceWatcher\Tests\Common\ParentTest;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Exception;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\Group;
 use ReflectionMethod;
 
 /**
@@ -16,6 +18,7 @@ use ReflectionMethod;
  *
  * @package Coco\SourceWatcher\Tests\Core\Database\Connections
  */
+#[AllowMockObjectsWithoutExpectations]
 class PostgreSqlConnectorTest extends ParentTest
 {
     private string $databaseName;
@@ -209,8 +212,8 @@ class PostgreSqlConnectorTest extends ParentTest
 
     /**
      * @throws SourceWatcherException
-     * @group integration
      */
+    #[Group( 'integration' )]
     public function testInsertUsingEnvironmentVariables () : void
     {
         $user = $this->getEnvironmentVariable( "UNIT_TEST_POSTGRESQL_USER", null );
